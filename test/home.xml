@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///nix/store/ivz2bw3zn5rqg39k4grjcyr19brbs5r7-nmap-7.98/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.98 scan initiated Tue Mar 17 13:53:59 2026 as: nmap -F -sV -oX home.xml 192.168.88.0/24 10.10.10.0/24 -->
+<nmaprun scanner="nmap" args="nmap -F -sV -oX home.xml 192.168.88.0/24 10.10.10.0/24" start="1773770039" startstr="Tue Mar 17 13:53:59 2026" version="7.98" xmloutputversion="1.05">
+<scaninfo type="connect" protocol="tcp" numservices="100" services="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.1" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.1" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.3" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.2" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.246" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.7" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.218" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.45" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.47" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.128" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.64" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<taskprogress task="Ping Scan" time="1773770040" percent="15.09" remaining="6" etc="1773770046"/>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.33" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.35" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.243" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.67" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.38" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.44" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="10.10.10.46" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.219" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<taskprogress task="Ping Scan" time="1773770042" percent="73.97" remaining="2" etc="1773770043"/>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.242" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="192.168.88.244" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<taskprogress task="Parallel DNS resolution of 21 hosts." time="1773770046" percent="14.29" remaining="6" etc="1773770052"/>
+<taskprogress task="Parallel DNS resolution of 21 hosts." time="1773770052" percent="71.43" remaining="3" etc="1773770055"/>
+<taskprogress task="Parallel DNS resolution of 21 hosts." time="1773770054" percent="85.71" remaining="2" etc="1773770056"/>
+<taskprogress task="Service scan" time="1773770117" percent="83.64" remaining="12" etc="1773770129"/>
+<taskprogress task="Service scan" time="1773770124" percent="85.45" remaining="12" etc="1773770135"/>
+<taskprogress task="Service scan" time="1773770134" percent="87.27" remaining="12" etc="1773770145"/>
+<taskprogress task="Service scan" time="1773770139" percent="87.27" remaining="12" etc="1773770151"/>
+<taskprogress task="Service scan" time="1773770149" percent="89.09" remaining="12" etc="1773770160"/>
+<taskprogress task="Service scan" time="1773770155" percent="98.18" remaining="2" etc="1773770157"/>
+<taskprogress task="Service scan" time="1773770157" percent="98.18" remaining="2" etc="1773770159"/>
+<taskprogress task="Service scan" time="1773770167" percent="98.18" remaining="3" etc="1773770169"/>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.88.1" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="filtered" count="97">
+<extrareasons reason="no-response" count="97" proto="tcp" ports="7,9,13,21-23,25-26,37,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,444-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="53"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="domain" product="Unbound" version="1.22.0" method="probed" conf="10"><cpe>cpe:/a:nlnetlabs:unbound:1.22.0</cpe></service></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="OPNsense" servicefp="SF-Port80-TCP:V=7.98%I=7%D=3/17%Time=69B9954F%P=x86_64-pc-linux-gnu%r(GetRequest,94,&quot;HTTP/1\.0\x20301\x20Moved\x20Permanently\r\nLocation:\x20https:///\r\nContent-Length:\x200\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&quot;)%r(HTTPOptions,94,&quot;HTTP/1\.0\x20301\x20Moved\x20Permanently\r\nLocation:\x20https:///\r\nContent-Length:\x200\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&quot;)%r(RTSPRequest,136,&quot;HTTP/1\.0\x20400\x20Bad\x20Request\r\nContent-Type:\x20text/html\r\nContent-Length:\x20162\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n\x20&lt;head&gt;\n\x20\x20&lt;meta\x20charset=\&quot;UTF-8\&quot;\x20/&gt;\n\x20\x20&lt;title&gt;400\x20Bad\x20Request&lt;/title&gt;\n\x20&lt;/head&gt;\n\x20&lt;body&gt;\n\x20\x20&lt;h1&gt;400\x20Bad\x20Request&lt;/h1&gt;\n\x20&lt;/body&gt;\n&lt;/html&gt;\n&quot;)%r(FourOhFourRequest,B3,&quot;HTTP/1\.0\x20301\x20Moved\x20Permanently\r\nLocation:\x20https:///nice%20ports%2C/Trinity\.txt\.bak\r\nContent-Length:\x200\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:28\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&quot;)%r(GenericLines,136,&quot;HTTP/1\.0\x20400\x20Bad\x20Request\r\nContent-Type:\x20text/html\r\nContent-Length:\x20162\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:28\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n\x20&lt;head&gt;\n\x20\x20&lt;meta\x20charset=\&quot;UTF-8\&quot;\x20/&gt;\n\x20\x20&lt;title&gt;400\x20Bad\x20Request&lt;/title&gt;\n\x20&lt;/head&gt;\n\x20&lt;body&gt;\n\x20\x20&lt;h1&gt;400\x20Bad\x20Request&lt;/h1&gt;\n\x20&lt;/body&gt;\n&lt;/html&gt;\n&quot;)%r(DNSVersionBindReqTCP,136,&quot;HTTP/1\.0\x20400\x20Bad\x20Request\r\nContent-Type:\x20text/html\r\nContent-Length:\x20162\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:33\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n\x20&lt;head&gt;\n\x20\x20&lt;meta\x20charset=\&quot;UTF-8\&quot;\x20/&gt;\n\x20\x20&lt;title&gt;400\x20Bad\x20Request&lt;/title&gt;\n\x20&lt;/head&gt;\n\x20&lt;body&gt;\n\x20\x20&lt;h1&gt;400\x20Bad\x20Request&lt;/h1&gt;\n\x20&lt;/body&gt;\n&lt;/html&gt;\n&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="https" product="OPNsense" servicefp="SF-Port443-TCP:V=7.98%T=SSL%I=7%D=3/17%Time=69B99555%P=x86_64-pc-linux-gnu%r(GetRequest,90A,&quot;HTTP/1\.0\x20200\x20OK\r\nSet-Cookie:\x20PHPSESSID=8d566b85e8ff21b7ae5c4dbc2a3a01a7;\x20path=/;\x20secure;\x20HttpOnly;\x20SameSite=Lax\r\nSet-Cookie:\x20PHPSESSID=8d566b85e8ff21b7ae5c4dbc2a3a01a7;\x20path=/;\x20secure;\x20HttpOnly\r\nExpires:\x20Thu,\x2019\x20Nov\x201981\x2008:52:00\x20GMT\r\nCache-Control:\x20no-store,\x20no-cache,\x20must-revalidate\r\nPragma:\x20no-cache\r\nContent-Security-Policy:\x20default-src\x20&apos;self&apos;;\x20script-src\x20&apos;self&apos;\x20&apos;unsafe-inline&apos;\x20&apos;unsafe-eval&apos;;\x20style-src\x20&apos;self&apos;\x20&apos;unsafe-inline&apos;\x20&apos;unsafe-eval&apos;;\r\nX-Frame-Options:\x20SAMEORIGIN\r\nX-Content-Type-Options:\x20nosniff\r\nX-XSS-Protection:\x201;\x20mode=block\r\nReferrer-Policy:\x20same-origin\r\nContent-type:\x20text/html;\x20charset=UTF-8\r\nContent-Length:\x201603\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:29\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=\&quot;en-US\&quot;\x20class=\&quot;no-js\&quot;&gt;\n\x20\x20&lt;head&gt;\n\n\x20\x20\x20\x20&lt;meta\x20charset=\&quot;UTF-8\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;meta\x20http-equiv=\&quot;X-UA-Compatible\&quot;\x20content=\&quot;IE=edge\&quot;&gt;\n\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;robots\&quot;\x20content=\&quot;noindex,&quot;)%r(HTTPOptions,398,&quot;HTTP/1\.0\x20403\x20Forbidden\r\nSet-Cookie:\x20PHPSESSID=bab5d31bb93132d0c6d48466531fad7a;\x20path=/;\x20secure;\x20HttpOnly;\x20SameSite=Lax\r\nExpires:\x20Thu,\x2019\x20Nov\x201981\x2008:52:00\x20GMT\r\nCache-Control:\x20no-store,\x20no-cache,\x20must-revalidate\r\nPragma:\x20no-cache\r\nContent-type:\x20text/html;\x20charset=UTF-8\r\nContent-Length:\x20553\r\nConnection:\x20close\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:29\x20GMT\r\nServer:\x20OPNsense\r\n\r\n&lt;html&gt;&lt;head&gt;&lt;title&gt;CSRF\x20check\x20failed&lt;/title&gt;\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&lt;script&gt;\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\$\(\x20document\x20\)\.ready\(function\(\)\x20{\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\$\.ajaxSetup\({\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&apos;beforeSend&apos;:\x20function\(xhr\)\x20{\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20xhr\.setRequestHeader\(\&quot;X-CSRFToken\&quot;,\x20\&quot;lsRs9xk3Pmz7PR1xb7gBww\&quot;\x20\);\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\);\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\);\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&lt;/script&gt;\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&lt;/head&gt;\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&lt;body&gt;\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&lt;p&gt;CSRF\x20check\x20failed\.\x20Your\x20form\x20session\x20may\x20have\x20expired,\x20or\x20you\x20may\x20not\x20have\x20cookies\x20enabled\.&lt;/p&gt;\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20&quot;);" tunnel="ssl" method="probed" conf="10"/></port>
+</ports>
+<times srtt="5410" rttvar="3662" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.88.2" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="95">
+<extrareasons reason="conn-refused" count="95" proto="tcp" ports="7,9,13,25-26,37,53,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="21"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ftp" product="MikroTik router ftpd" version="7.14.3" devicetype="router" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="MikroTik RouterOS sshd" extrainfo="protocol 2.0" ostype="Linux" devicetype="router" method="probed" conf="10"><cpe>cpe:/o:mikrotik:routeros</cpe></service></port>
+<port protocol="tcp" portid="23"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="telnet" product="Linux telnetd" ostype="Linux" method="probed" conf="10"><cpe>cpe:/o:linux:linux_kernel</cpe></service></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" servicefp="SF-Port80-TCP:V=7.98%I=7%D=3/17%Time=69B9954F%P=x86_64-pc-linux-gnu%r(GetRequest,B83,&quot;HTTP/1\.0\x20200\x20OK\r\nCache-Control:\x20max-age=31536000\r\nConnection:\x20close\r\nContent-Length:\x202723\r\nContent-Type:\x20text/html\r\nDate:\x20Mon,\x2023\x20Nov\x201970\x2002:57:27\x20GMT\r\nExpires:\x20Tue,\x2023\x20Nov\x201971\x2002:57:27\x20GMT\r\nX-Frame-Options:\x20sameorigin\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n&lt;meta\x20charset=\&quot;utf-8\&quot;&gt;\n&lt;link\x20rel=\&quot;icon\&quot;\x20href=\&quot;/favicon\.png\&quot;&gt;\n&lt;link\x20rel=\&quot;icon\&quot;\x20href=\&quot;/favicon\.svg\&quot;&gt;\n&lt;title&gt;RouterOS&lt;/title&gt;\n&lt;style&gt;\nbody\x20{\n\x20\x20\x20\x20font-family:\x20Verdana,\x20Geneva,\x20sans-serif;\n\x20\x20\x20\x20font-size:\x2011px;\n}\nimg\x20{border:\x20none}\nimg:hover\x20{opacity:\x200\.8;}\nh1\x20{\n\x20\x20\x20\x20font-size:\x201\.7em;\n\x20\x20\x20\x20display:\x20inline;\n\x20\x20\x20\x20margin-bottom:\x2010px;\n}\n#container\x20{\n\x20\x20\x20\x20width:\x2070%;\n\x20\x20\x20\x20margin:\x2010%\x20auto;\n}\n#box\x20{\n\x20\x20\x20\x20background:\x20linear-gradient\(#ffffff,#f3f3f3\);\n\x20\x20\x20\x20border:\x201px\x20solid\x20#c1c1c1;\n\x20\x20\x20\x20padding:\x2030px;\n}\n\.floater\x20{float:\x20left;\x20margin-right:\x2010px;}\n\.floater\x20label\x20{display:\x20block;\x20text-align:\x20center;}\n\n#login\x20{margin:\x202em\x200\x202em\x200;}\n#login\x20td\x20{padding:\x200\x204px\x20&quot;)%r(HTTPOptions,14B,&quot;HTTP/1\.0\x20503\x20Service\x20Unavailable\r\nCache-Control:\x20no-store\r\nConnection:\x20close\r\nContent-Length:\x20109\r\nContent-Type:\x20text/html\r\nDate:\x20Mon,\x2023\x20Nov\x201970\x2002:57:27\x20GMT\r\nExpires:\x200\r\nPragma:\x20no-cache\r\nX-Frame-Options:\x20sameorigin\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=en&gt;\n&lt;title&gt;Error\x20503\x20:\x20unknown\x20method&lt;/title&gt;\n&lt;h1&gt;Error\x20503\x20:\x20unknown\x20method&lt;/h1&gt;\n&quot;)%r(RTSPRequest,14B,&quot;HTTP/1\.0\x20503\x20Service\x20Unavailable\r\nCache-Control:\x20no-store\r\nConnection:\x20close\r\nContent-Length:\x20109\r\nContent-Type:\x20text/html\r\nDate:\x20Mon,\x2023\x20Nov\x201970\x2002:57:27\x20GMT\r\nExpires:\x200\r\nPragma:\x20no-cache\r\nX-Frame-Options:\x20sameorigin\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=en&gt;\n&lt;title&gt;Error\x20503\x20:\x20unknown\x20method&lt;/title&gt;\n&lt;h1&gt;Error\x20503\x20:\x20unknown\x20method&lt;/h1&gt;\n&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="2000"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="bandwidth-test" product="MikroTik bandwidth-test server" method="probed" conf="10"/></port>
+</ports>
+<times srtt="16715" rttvar="15640" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.88.3" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21,25-26,37,53,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="AllegroSoft RomSShell sshd" version="5.40" extrainfo="protocol 2.0" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="23"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="telnet" product="Foundry Networks telnetd" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="tcpwrapped" method="probed" conf="8"/></port>
+</ports>
+<times srtt="3966" rttvar="959" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.88.7" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="filtered" count="98">
+<extrareasons reason="no-response" count="98" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,444-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="istio-envoy" servicefp="SF-Port80-TCP:V=7.98%I=7%D=3/17%Time=69B99550%P=x86_64-pc-linux-gnu%r(GetRequest,AC,&quot;HTTP/1\.1\x20426\x20Upgrade\x20Required\r\ncontent-length:\x2016\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nUpgrade\x20Required&quot;)%r(HTTPOptions,AC,&quot;HTTP/1\.1\x20426\x20Upgrade\x20Required\r\ncontent-length:\x2016\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:24\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nUpgrade\x20Required&quot;)%r(RTSPRequest,A2,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2011\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:25\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nBad\x20Request&quot;)%r(FourOhFourRequest,AC,&quot;HTTP/1\.1\x20426\x20Upgrade\x20Required\r\ncontent-length:\x2016\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:31\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nUpgrade\x20Required&quot;)%r(DNSVersionBindReqTCP,A2,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2011\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:42\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nBad\x20Request&quot;)%r(DNSStatusRequestTCP,A2,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2011\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:43\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nBad\x20Request&quot;)%r(Help,A2,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2011\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:44\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nBad\x20Request&quot;)%r(SSLSessionReq,A2,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2011\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:45\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nBad\x20Request&quot;)%r(TerminalServerCookie,A2,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\ncontent-length:\x2011\r\ncontent-type:\x20text/plain\r\ndate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:46\x20GMT\r\nserver:\x20istio-envoy\r\nconnection:\x20close\r\n\r\nBad\x20Request&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="https" method="table" conf="3"/></port>
+</ports>
+<times srtt="9284" rttvar="8347" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.88.64" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="92">
+<extrareasons reason="conn-refused" count="92" proto="tcp" ports="7,9,13,21,23,25-26,37,53,79,81,88,106,110,113,119,135,143-144,179,199,389,427,444,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="OpenSSH" version="9.2p1 Debian 2+deb12u3" extrainfo="protocol 2.0" ostype="Linux" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:9.2p1</cpe><cpe>cpe:/o:linux:linux_kernel</cpe></service></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="nginx" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+<port protocol="tcp" portid="111"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="rpcbind" version="2-4" extrainfo="RPC #100000" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="139"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="netbios-ssn" product="Samba smbd" version="4" method="probed" conf="10"><cpe>cpe:/a:samba:samba:4</cpe></service></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="nginx" tunnel="ssl" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+<port protocol="tcp" portid="445"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="netbios-ssn" product="Samba smbd" version="4" method="probed" conf="10"><cpe>cpe:/a:samba:samba:4</cpe></service></port>
+<port protocol="tcp" portid="2049"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="nfs" version="4" extrainfo="RPC #100003" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="5357"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="BaseHTTPServer" version="0.6" extrainfo="Python 3.11.9" method="probed" conf="10"><cpe>cpe:/a:python:python:3.11.9</cpe></service></port>
+</ports>
+<times srtt="1852" rttvar="422" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770216"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.67" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="99">
+<extrareasons reason="conn-refused" count="99" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="3094" rttvar="820" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.128" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21,23,25-26,37,53,79-81,88,106,110,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="OpenSSH" version="9.2p1 Debian 2+deb12u7" extrainfo="protocol 2.0" ostype="Linux" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:9.2p1</cpe><cpe>cpe:/o:linux:linux_kernel</cpe></service></port>
+<port protocol="tcp" portid="111"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="rpcbind" version="2-4" extrainfo="RPC #100000" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="3128"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="Proxmox Virtual Environment REST API" version="3.0" method="probed" conf="10"><cpe>cpe:/a:proxmox:proxmox_virtual_environment:3.0</cpe></service></port>
+</ports>
+<times srtt="3092" rttvar="491" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.218" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8081,8443,8888,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="3000"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ppp" servicefp="SF-Port3000-TCP:V=7.98%I=7%D=3/17%Time=69B99559%P=x86_64-pc-linux-gnu%r(Help,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(NCP,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(RPCCheck,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(DNSVersionBindReqTCP,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(DNSStatusRequestTCP,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(SSLSessionReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(TerminalServerCookie,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(TLSSessionReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(Kerberos,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(SMBProgNeg,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(X11Probe,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LPDString,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LDAPSearchReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LDAPBindReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(SIPOptions,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LANDesk-RC,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(TerminalServer,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(NotesRPC,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(JavaRMI,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(WMSRequest,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(oracle-tns,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(ms-sql-s,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(afp,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(giop,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;);" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8080"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http-proxy" servicefp="SF-Port8080-TCP:V=7.98%I=7%D=3/17%Time=69B9954F%P=x86_64-pc-linux-gnu%r(GetRequest,524,&quot;HTTP/1\.1\x20200\x20OK\r\nCache-Control:\x20no-store\r\nAccept-Ranges:\x20bytes\r\nLast-Modified:\x20Mon,\x2002\x20Mar\x202026\x2011:18:16\x20GMT\r\nETag:\x20W/\&quot;423-19cae4530c0\&quot;\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x201059\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nConnection:\x20close\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n\n&lt;head&gt;\n\x20\x20\x20\x20&lt;meta\x20charset=\&quot;UTF-8\&quot;&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;viewport\&quot;\x20content=\&quot;width=device-width,\x20initial-scale=1\&quot;&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;robots\&quot;\x20content=\&quot;noindex\&quot;&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;referrer\&quot;\x20content=\&quot;no-referrer\&quot;&gt;\n\n\x20\x20\x20\x20&lt;title&gt;Zigbee2MQTT\x20WindFront&lt;/title&gt;\n\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;icon\&quot;\x20type=\&quot;image/png\&quot;\x20href=\&quot;\./assets/favicon-96x96-BP9bzx2f\.png\&quot;\x20sizes=\&quot;96x96\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;icon\&quot;\x20type=\&quot;image/svg\+xml\&quot;\x20href=\&quot;\./assets/favicon-D2_AfdO8\.svg\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;shortcut\x20icon\&quot;\x20href=\&quot;\./assets/favicon-C0HgnjBI\.ico\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;apple-touch-icon\&quot;\x20sizes=\&quot;180x180\&quot;\x20href=\&quot;\./assets/apple-touch-icon-TxoCylrI\.png\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;app&quot;)%r(HTTPOptions,16C,&quot;HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Security-Policy:\x20default-src\x20&apos;none&apos;\r\nX-Content-Type-Options:\x20nosniff\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x20143\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nConnection:\x20close\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n&lt;head&gt;\n&lt;meta\x20charset=\&quot;utf-8\&quot;&gt;\n&lt;title&gt;Error&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n&lt;pre&gt;Cannot\x20OPTIONS\x20/&lt;/pre&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n&quot;)%r(RTSPRequest,16C,&quot;HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Security-Policy:\x20default-src\x20&apos;none&apos;\r\nX-Content-Type-Options:\x20nosniff\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x20143\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:23\x20GMT\r\nConnection:\x20close\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n&lt;head&gt;\n&lt;meta\x20charset=\&quot;utf-8\&quot;&gt;\n&lt;title&gt;Error&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n&lt;pre&gt;Cannot\x20OPTIONS\x20/&lt;/pre&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="2543" rttvar="887" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770216"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.219" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="99">
+<extrareasons reason="conn-refused" count="99" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="2788" rttvar="790" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770216"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.242" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="99">
+<extrareasons reason="conn-refused" count="99" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="3122" rttvar="820" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.243" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8081,8443,8888,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="3000"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ppp" servicefp="SF-Port3000-TCP:V=7.98%I=7%D=3/17%Time=69B99559%P=x86_64-pc-linux-gnu%r(Help,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(NCP,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(RPCCheck,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(DNSVersionBindReqTCP,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(DNSStatusRequestTCP,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(SSLSessionReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(TerminalServerCookie,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(TLSSessionReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(Kerberos,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(SMBProgNeg,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(X11Probe,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LPDString,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LDAPSearchReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LDAPBindReq,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(SIPOptions,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(LANDesk-RC,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(TerminalServer,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(NotesRPC,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(JavaRMI,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(WMSRequest,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(oracle-tns,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(ms-sql-s,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(afp,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;)%r(giop,2F,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n&quot;);" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8080"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http-proxy" servicefp="SF-Port8080-TCP:V=7.98%I=7%D=3/17%Time=69B99550%P=x86_64-pc-linux-gnu%r(GetRequest,524,&quot;HTTP/1\.1\x20200\x20OK\r\nCache-Control:\x20no-store\r\nAccept-Ranges:\x20bytes\r\nLast-Modified:\x20Mon,\x2002\x20Mar\x202026\x2011:18:16\x20GMT\r\nETag:\x20W/\&quot;423-19cae4530c0\&quot;\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x201059\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:24\x20GMT\r\nConnection:\x20close\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n\n&lt;head&gt;\n\x20\x20\x20\x20&lt;meta\x20charset=\&quot;UTF-8\&quot;&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;viewport\&quot;\x20content=\&quot;width=device-width,\x20initial-scale=1\&quot;&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;robots\&quot;\x20content=\&quot;noindex\&quot;&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;referrer\&quot;\x20content=\&quot;no-referrer\&quot;&gt;\n\n\x20\x20\x20\x20&lt;title&gt;Zigbee2MQTT\x20WindFront&lt;/title&gt;\n\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;icon\&quot;\x20type=\&quot;image/png\&quot;\x20href=\&quot;\./assets/favicon-96x96-BP9bzx2f\.png\&quot;\x20sizes=\&quot;96x96\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;icon\&quot;\x20type=\&quot;image/svg\+xml\&quot;\x20href=\&quot;\./assets/favicon-D2_AfdO8\.svg\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;shortcut\x20icon\&quot;\x20href=\&quot;\./assets/favicon-C0HgnjBI\.ico\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;link\x20rel=\&quot;apple-touch-icon\&quot;\x20sizes=\&quot;180x180\&quot;\x20href=\&quot;\./assets/apple-touch-icon-TxoCylrI\.png\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;app&quot;)%r(HTTPOptions,16C,&quot;HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Security-Policy:\x20default-src\x20&apos;none&apos;\r\nX-Content-Type-Options:\x20nosniff\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x20143\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:24\x20GMT\r\nConnection:\x20close\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n&lt;head&gt;\n&lt;meta\x20charset=\&quot;utf-8\&quot;&gt;\n&lt;title&gt;Error&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n&lt;pre&gt;Cannot\x20OPTIONS\x20/&lt;/pre&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n&quot;)%r(RTSPRequest,16C,&quot;HTTP/1\.1\x20404\x20Not\x20Found\r\nContent-Security-Policy:\x20default-src\x20&apos;none&apos;\r\nX-Content-Type-Options:\x20nosniff\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Length:\x20143\r\nDate:\x20Tue,\x2017\x20Mar\x202026\x2017:54:24\x20GMT\r\nConnection:\x20close\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n&lt;head&gt;\n&lt;meta\x20charset=\&quot;utf-8\&quot;&gt;\n&lt;title&gt;Error&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n&lt;pre&gt;Cannot\x20OPTIONS\x20/&lt;/pre&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="3137" rttvar="949" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="192.168.88.244" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="94">
+<extrareasons reason="conn-refused" count="94" proto="tcp" ports="7,9,13,25-26,37,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="21"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ftp" product="MikroTik router ftpd" version="7.12.1" devicetype="router" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="MikroTik RouterOS sshd" extrainfo="protocol 2.0" ostype="Linux" devicetype="router" method="probed" conf="10"><cpe>cpe:/o:mikrotik:routeros</cpe></service></port>
+<port protocol="tcp" portid="23"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="telnet" product="Linux telnetd" ostype="Linux" method="probed" conf="10"><cpe>cpe:/o:linux:linux_kernel</cpe></service></port>
+<port protocol="tcp" portid="53"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="domain" extrainfo="generic dns response: NOTIMP" servicefp="SF-Port53-TCP:V=7.98%I=7%D=3/17%Time=69B99557%P=x86_64-pc-linux-gnu%r(DNSVersionBindReqTCP,E,&quot;\0\x0c\0\x06\x81\x84\0\0\0\0\0\0\0\0&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" servicefp="SF-Port80-TCP:V=7.98%I=7%D=3/17%Time=69B99555%P=x86_64-pc-linux-gnu%r(GetRequest,B83,&quot;HTTP/1\.0\x20200\x20OK\r\nCache-Control:\x20max-age=31536000\r\nConnection:\x20close\r\nContent-Length:\x202723\r\nContent-Type:\x20text/html\r\nDate:\x20Fri,\x2013\x20Mar\x202026\x2013:58:42\x20GMT\r\nExpires:\x20Sat,\x2013\x20Mar\x202027\x2013:58:42\x20GMT\r\nX-Frame-Options:\x20sameorigin\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n&lt;meta\x20charset=\&quot;utf-8\&quot;&gt;\n&lt;link\x20rel=\&quot;icon\&quot;\x20href=\&quot;/favicon\.png\&quot;&gt;\n&lt;link\x20rel=\&quot;icon\&quot;\x20href=\&quot;/favicon\.svg\&quot;&gt;\n&lt;title&gt;RouterOS&lt;/title&gt;\n&lt;style&gt;\nbody\x20{\n\x20\x20\x20\x20font-family:\x20Verdana,\x20Geneva,\x20sans-serif;\n\x20\x20\x20\x20font-size:\x2011px;\n}\nimg\x20{border:\x20none}\nimg:hover\x20{opacity:\x200\.8;}\nh1\x20{\n\x20\x20\x20\x20font-size:\x201\.7em;\n\x20\x20\x20\x20display:\x20inline;\n\x20\x20\x20\x20margin-bottom:\x2010px;\n}\n#container\x20{\n\x20\x20\x20\x20width:\x2070%;\n\x20\x20\x20\x20margin:\x2010%\x20auto;\n}\n#box\x20{\n\x20\x20\x20\x20background:\x20linear-gradient\(#ffffff,#f3f3f3\);\n\x20\x20\x20\x20border:\x201px\x20solid\x20#c1c1c1;\n\x20\x20\x20\x20padding:\x2030px;\n}\n\.floater\x20{float:\x20left;\x20margin-right:\x2010px;}\n\.floater\x20label\x20{display:\x20block;\x20text-align:\x20center;}\n\n#login\x20{margin:\x202em\x200\x202em\x200;}\n#login\x20td\x20{padding:\x200\x204px\x20&quot;)%r(HTTPOptions,14B,&quot;HTTP/1\.0\x20503\x20Service\x20Unavailable\r\nCache-Control:\x20no-store\r\nConnection:\x20close\r\nContent-Length:\x20109\r\nContent-Type:\x20text/html\r\nDate:\x20Fri,\x2013\x20Mar\x202026\x2013:58:42\x20GMT\r\nExpires:\x200\r\nPragma:\x20no-cache\r\nX-Frame-Options:\x20sameorigin\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=en&gt;\n&lt;title&gt;Error\x20503\x20:\x20unknown\x20method&lt;/title&gt;\n&lt;h1&gt;Error\x20503\x20:\x20unknown\x20method&lt;/h1&gt;\n&quot;)%r(RTSPRequest,14B,&quot;HTTP/1\.0\x20503\x20Service\x20Unavailable\r\nCache-Control:\x20no-store\r\nConnection:\x20close\r\nContent-Length:\x20109\r\nContent-Type:\x20text/html\r\nDate:\x20Fri,\x2013\x20Mar\x202026\x2013:58:42\x20GMT\r\nExpires:\x200\r\nPragma:\x20no-cache\r\nX-Frame-Options:\x20sameorigin\r\n\r\n&lt;!doctype\x20html&gt;\n&lt;html\x20lang=en&gt;\n&lt;title&gt;Error\x20503\x20:\x20unknown\x20method&lt;/title&gt;\n&lt;h1&gt;Error\x20503\x20:\x20unknown\x20method&lt;/h1&gt;\n&quot;);" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="2000"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="bandwidth-test" product="MikroTik bandwidth-test server" method="probed" conf="10"/></port>
+</ports>
+<times srtt="16262" rttvar="13596" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770216"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="192.168.88.246" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="99">
+<extrareasons reason="conn-refused" count="99" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="2541" rttvar="755" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770216"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="10.10.10.1" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21,25-26,37,53,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="AllegroSoft RomSShell sshd" version="5.40" extrainfo="protocol 2.0" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="23"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="telnet" product="Foundry Networks telnetd" method="probed" conf="10"/></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="tcpwrapped" method="probed" conf="8"/></port>
+</ports>
+<times srtt="28441" rttvar="4742" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="10.10.10.33" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8080-8081,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="8008"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ajp13" tunnel="ssl" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="https-alt" tunnel="ssl" method="table" conf="3"/></port>
+</ports>
+<times srtt="4108" rttvar="592" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="10.10.10.35" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="97">
+<extrareasons reason="conn-refused" count="97" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8080-8081,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="8008"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8009"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ajp13" tunnel="ssl" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="https-alt" tunnel="ssl" method="table" conf="3"/></port>
+</ports>
+<times srtt="3514" rttvar="318" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770055"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="10.10.10.38" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="100">
+<extrareasons reason="conn-refused" count="100" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+</ports>
+<times srtt="8750" rttvar="1240" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770055"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="10.10.10.44" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="100">
+<extrareasons reason="conn-refused" count="100" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+</ports>
+<times srtt="34340" rttvar="10190" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="10.10.10.45" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="98">
+<extrareasons reason="conn-refused" count="98" proto="tcp" ports="7,9,13,21,23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="OpenSSH" version="10.2" extrainfo="protocol 2.0" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:10.2</cpe></service></port>
+<port protocol="tcp" portid="8080"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http-proxy" product="llama.cpp" servicefp="SF-Port8080-TCP:V=7.98%I=7%D=3/17%Time=69B99558%P=x86_64-pc-linux-gnu%r(GetRequest,BF,&quot;HTTP/1\.1\x20200\x20OK\r\nKeep-Alive:\x20timeout=5,\x20max=100\r\nContent-Type:\x20text/plain\r\nServer:\x20llama\.cpp\r\nContent-Length:\x2044\r\nAccess-Control-Allow-Origin:\x20\r\n\r\nError:\x20gzip\x20is\x20not\x20supported\x20by\x20this\x20browser&quot;)%r(HTTPOptions,103,&quot;HTTP/1\.1\x20200\x20OK\r\nKeep-Alive:\x20timeout=5,\x20max=100\r\nContent-Length:\x200\r\nContent-Type:\x20text/html\r\nServer:\x20llama\.cpp\r\nAccess-Control-Allow-Origin:\x20\r\nAccess-Control-Allow-Credentials:\x20true\r\nAccess-Control-Allow-Headers:\x20\*\r\nAccess-Control-Allow-Methods:\x20GET,\x20POST\r\n\r\n&quot;)%r(RTSPRequest,55,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Length:\x200\r\nServer:\x20llama\.cpp\r\nConnection:\x20close\r\n\r\n&quot;)%r(FourOhFourRequest,EC,&quot;HTTP/1\.1\x20404\x20Not\x20Found\r\nConnection:\x20close\r\nContent-Type:\x20application/json;\x20charset=utf-8\r\nServer:\x20llama\.cpp\r\nContent-Length:\x2074\r\nAccess-Control-Allow-Origin:\x20\r\n\r\n{\&quot;error\&quot;:{\&quot;message\&quot;:\&quot;File\x20Not\x20Found\&quot;,\&quot;type\&quot;:\&quot;not_found_error\&quot;,\&quot;code\&quot;:404}}&quot;)%r(Socks5,55,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Length:\x200\r\nServer:\x20llama\.cpp\r\nConnection:\x20close\r\n\r\n&quot;)%r(GenericLines,55,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Length:\x200\r\nServer:\x20llama\.cpp\r\nConnection:\x20close\r\n\r\n&quot;)%r(Help,55,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Length:\x200\r\nServer:\x20llama\.cpp\r\nConnection:\x20close\r\n\r\n&quot;)%r(TerminalServerCookie,55,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Length:\x200\r\nServer:\x20llama\.cpp\r\nConnection:\x20close\r\n\r\n&quot;)%r(SIPOptions,55,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Length:\x200\r\nServer:\x20llama\.cpp\r\nConnection:\x20close\r\n\r\n&quot;);" method="probed" conf="10"/></port>
+</ports>
+<times srtt="32" rttvar="19" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770217"><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="10.10.10.46" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="96">
+<extrareasons reason="conn-refused" count="96" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79,81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,444-445,465,513-515,543-544,548,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="nginx" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="nginx" tunnel="ssl" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+<port protocol="tcp" portid="554"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="rtsp" product="D-Link DCS-2130 or Pelco IDE10DN webcam rtspd" devicetype="webcam" method="probed" conf="10"><cpe>cpe:/h:pelco:ide10dn</cpe></service></port>
+<port protocol="tcp" portid="8000"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="soap" product="gSOAP" version="2.8" method="probed" conf="10"><cpe>cpe:/a:genivia:gsoap:2.8</cpe></service></port>
+</ports>
+<times srtt="20061" rttvar="2294" to="100000"/>
+</host>
+<host starttime="1773770055" endtime="1773770055"><status state="up" reason="conn-refused" reason_ttl="0"/>
+<address addr="10.10.10.47" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="100">
+<extrareasons reason="conn-refused" count="100" proto="tcp" ports="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+</extraports>
+</ports>
+<times srtt="16188" rttvar="797" to="100000"/>
+</host>
+<runstats><finished time="1773770217" timestr="Tue Mar 17 13:56:57 2026" summary="Nmap done at Tue Mar 17 13:56:57 2026; 512 IP addresses (21 hosts up) scanned in 178.22 seconds" elapsed="178.22" exit="success"/><hosts up="21" down="491" total="512"/>
+</runstats>
+</nmaprun>

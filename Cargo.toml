@@ -4,9 +4,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+clap = { version = "4.6.0", features = ["derive"] }
 diesel = { version = "2.2.0", features = ["postgres", "sqlite", "returning_clauses_for_sqlite_3_35"] }
 # libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 dotenvy = "0.15"
+quick-xml = { version = "0.39.2", features = ["serialize"] }
+regex = "1.12.3"
+serde = { version = "1.0.228", features = ["derive"] }
+thiserror = "2.0.18"
 [profile.release]
 opt-level = "z"     # Optimize for size. "z" also turns off loop vectorization.
 lto = true          # Enable Link Time Optimization (Full)

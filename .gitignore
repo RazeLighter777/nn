@@ -1,6 +1,7 @@
 .rustup
 .cargo
 .direnv
+database.db
 # Added by cargo
 
 /target
