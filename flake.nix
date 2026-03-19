@@ -1,36 +1,56 @@
 {
-  description = "Rust musl project with rustup";
+  description = "Building static binaries with musl";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    crane.url = "github:ipetkov/crane";
+
+    flake-utils.url = "github:numtide/flake-utils";
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { self, nixpkgs }:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
-    in
     {
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          rustup
-          pkg-config
-          musl
-          musl.dev
-          gcc
-        ];
+      nixpkgs,
+      crane,
+      flake-utils,
+      rust-overlay,
+      ...
+    }:
+    flake-utils.lib.eachSystem [ "x86_64-linux" ] (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ (import rust-overlay) ];
+        };
 
-        shellHook = ''
-          export RUSTUP_HOME=$PWD/.rustup
-          export CARGO_HOME=$PWD/.cargo
+        craneLib = (crane.mkLib pkgs).overrideToolchain (
+          p:
+          p.rust-bin.stable.latest.default.override {
+            targets = [ "x86_64-unknown-linux-musl" ];
+          }
+        );
 
-          if [ ! -d "$RUSTUP_HOME" ]; then
-            rustup toolchain install stable
-            rustup default stable
-            rustup target add x86_64-unknown-linux-musl
-          fi
-        '';
-      };
-    };
+        nn2 = craneLib.buildPackage {
+          src = craneLib.cleanCargoSource ./.;
+          strictDeps = true;
+
+          CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
+          CARGO_BUILD_RUSTFLAGS = "-C target-feature=+crt-static";
+        };
+      in
+      {
+        checks = {
+          inherit nn2;
+        };
+
+        packages.default = nn2;
+      }
+    );
 }

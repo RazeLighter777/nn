@@ -1,0 +1,19 @@
+[package]
+name = "nn2"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+diesel = { version = "1", features = ["postgres", "sqlite"] }
+# Needed for sqlite.
+libsqlite3-sys = { version = "*", features = ["bundled"] }
+# Needed for Postgres.
+openssl = "*"
+openssl-probe = "0.1.2"
+
+[profile.release]
+opt-level = "z"     # Optimize for size. "z" also turns off loop vectorization.
+lto = true          # Enable Link Time Optimization (Full)
+codegen-units = 1   # Reduce parallel code generation units for better optimization
+panic = "abort"     # Remove stack unwinding code
+strip = true        # Automatically strip symbols from the binary
