@@ -62,17 +62,34 @@ CREATE TABLE service(
         FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE
 );
 
+CREATE TABLE credential(
+        id INTEGER NOT NULL PRIMARY KEY,
+        username TEXT,
+        password TEXT,
+        hash TEXT
+);
+
+CREATE TABLE credential_service(
+        id INTEGER NOT NULL PRIMARY KEY,
+        credential_id INTEGER NOT NULL,
+        service_id INTEGER NOT NULL,
+        FOREIGN KEY (credential_id) REFERENCES credential(id) ON DELETE CASCADE,
+        FOREIGN KEY (service_id) REFERENCES service(id) ON DELETE CASCADE
+);
+
 CREATE TABLE tag_assignment(
         id INTEGER NOT NULL PRIMARY KEY,
         service_id INTEGER,
         address_id INTEGER,
         host_id INTEGER,
         network_id INTEGER,
+        credential_id INTEGER,
         tag_id INTEGER NOT NULL,
         FOREIGN KEY (service_id) REFERENCES service(id) ON DELETE CASCADE,
         FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE,
         FOREIGN KEY (host_id) REFERENCES host(id) ON DELETE CASCADE,
         FOREIGN KEY (network_id) REFERENCES network(id) ON DELETE CASCADE,
+        FOREIGN KEY (credential_id) REFERENCES credential(id) ON DELETE CASCADE,
         FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE
 );
 
@@ -83,8 +100,10 @@ CREATE TABLE note(
         address_id INTEGER,
         host_id INTEGER,
         network_id INTEGER,
+        credential_id INTEGER,
         FOREIGN KEY (service_id) REFERENCES service(id) ON DELETE CASCADE,
         FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE,
         FOREIGN KEY (host_id) REFERENCES host(id) ON DELETE CASCADE,
-        FOREIGN KEY (network_id) REFERENCES network(id) ON DELETE CASCADE
+        FOREIGN KEY (network_id) REFERENCES network(id) ON DELETE CASCADE,
+        FOREIGN KEY (credential_id) REFERENCES credential(id) ON DELETE CASCADE
 );

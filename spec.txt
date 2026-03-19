@@ -1,0 +1,1422 @@
+openapi: 3.1.0
+info:
+  title: Network Inventory API
+  version: 1.0.0
+  description: >
+    CRUD API for managing sites, networks, hosts, addresses, services,
+    credentials, tags, and notes. Associations (tag_assignment,
+    credential_service) are managed through sub-resources.
+
+servers:
+  - url: /api/v1
+
+# ---------------------------------------------------------------------------
+# Reusable components
+# ---------------------------------------------------------------------------
+components:
+
+  parameters:
+    siteId:
+      name: site_id
+      in: path
+      required: true
+      schema: { type: integer }
+    networkId:
+      name: network_id
+      in: path
+      required: true
+      schema: { type: integer }
+    hostId:
+      name: host_id
+      in: path
+      required: true
+      schema: { type: integer }
+    addressId:
+      name: address_id
+      in: path
+      required: true
+      schema: { type: integer }
+    serviceId:
+      name: service_id
+      in: path
+      required: true
+      schema: { type: integer }
+    credentialId:
+      name: credential_id
+      in: path
+      required: true
+      schema: { type: integer }
+    tagId:
+      name: tag_id
+      in: path
+      required: true
+      schema: { type: integer }
+    noteId:
+      name: note_id
+      in: path
+      required: true
+      schema: { type: integer }
+
+    # Common filter / pagination params
+    limit:
+      name: limit
+      in: query
+      schema: { type: integer, default: 100, maximum: 1000 }
+    offset:
+      name: offset
+      in: query
+      schema: { type: integer, default: 0 }
+    q:
+      name: q
+      in: query
+      description: >-
+        LIKE-style substring search. For sites/tags: matches `name`.
+        For hosts: matches `name` or `hostname`. For services: matches `name`,
+        `product`, or `hostname`. Implemented as `column LIKE '%q%'` — works
+        on both SQLite and PostgreSQL via Diesel's `.like()` filter.
+      schema: { type: string }
+
+  schemas:
+
+    # ---- core resources ----
+
+    Site:
+      type: object
+      required: [name]
+      properties:
+        id:   { type: integer, readOnly: true }
+        name: { type: string }
+
+    Tag:
+      type: object
+      required: [name]
+      properties:
+        id:   { type: integer, readOnly: true }
+        name: { type: string }
+
+    Network:
+      type: object
+      required: [site_id, name]
+      properties:
+        id:      { type: integer, readOnly: true }
+        site_id: { type: integer }
+        name:    { type: string }
+
+    Host:
+      type: object
+      required: [site_id, name]
+      properties:
+        id:       { type: integer, readOnly: true }
+        site_id:  { type: integer }
+        name:     { type: string }
+        os_type:  { type: string, nullable: true }
+        hostname: { type: string, nullable: true }
+
+    Address:
+      type: object
+      required: [host_id, network_id, ip, ip_family, netmask]
+      properties:
+        id:         { type: integer, readOnly: true }
+        host_id:    { type: integer }
+        network_id: { type: integer }
+        ip:         { type: string }
+        ip_family:  { type: integer, enum: [4, 6] }
+        netmask:    { type: integer }
+        mac:        { type: string, nullable: true }
+
+    Service:
+      type: object
+      required: [site_id, address_id, port, ip_proto_number, state, name]
+      properties:
+        id:              { type: integer, readOnly: true }
+        site_id:         { type: integer }
+        address_id:      { type: integer }
+        port:            { type: integer }
+        ip_proto_number: { type: integer }
+        state:           { type: string }
+        name:            { type: string }
+        product:         { type: string,  nullable: true }
+        version:         { type: string,  nullable: true }
+        extra_info:      { type: string,  nullable: true }
+        os_type:         { type: string,  nullable: true }
+        device_type:     { type: string,  nullable: true }
+        hostname:        { type: string,  nullable: true }
+        confidence:      { type: integer, nullable: true }
+        method:          { type: string,  nullable: true }
+        service_fp:      { type: string,  nullable: true }
+        cpe:             { type: string,  nullable: true }
+        rpcnum:          { type: integer, nullable: true }
+        lowver:          { type: integer, nullable: true }
+        highver:         { type: integer, nullable: true }
+        owner:           { type: string,  nullable: true }
+
+    Credential:
+      type: object
+      properties:
+        id:       { type: integer, readOnly: true }
+        username: { type: string,  nullable: true }
+        password: { type: string,  nullable: true }
+        hash:     { type: string,  nullable: true }
+
+    Note:
+      type: object
+      required: [text]
+      properties:
+        id:            { type: integer, readOnly: true }
+        text:          { type: string }
+        service_id:    { type: integer, nullable: true }
+        address_id:    { type: integer, nullable: true }
+        host_id:       { type: integer, nullable: true }
+        network_id:    { type: integer, nullable: true }
+        credential_id: { type: integer, nullable: true }
+
+    # ---- update (PATCH) bodies -- all fields optional -------------------
+    # Diesel: implement as #[derive(AsChangeset)] structs where every field
+    # is Option<T>.  For nullable DB columns use Option<Option<T>>: outer
+    # None = "don't touch", inner None = "set to NULL".
+    # JSON Merge Patch semantics (RFC 7396): absent key = no change,
+    # explicit JSON null = set to NULL (nullable columns only).
+
+    SiteUpdate:
+      type: object
+      properties:
+        name: { type: string }
+
+    TagUpdate:
+      type: object
+      properties:
+        name: { type: string }
+
+    NetworkUpdate:
+      type: object
+      properties:
+        site_id: { type: integer }
+        name:    { type: string }
+
+    HostUpdate:
+      type: object
+      properties:
+        site_id:  { type: integer }
+        name:     { type: string }
+        os_type:  { type: string, nullable: true }
+        hostname: { type: string, nullable: true }
+
+    AddressUpdate:
+      type: object
+      properties:
+        host_id:    { type: integer }
+        network_id: { type: integer }
+        ip:         { type: string }
+        ip_family:  { type: integer, enum: [4, 6] }
+        netmask:    { type: integer }
+        mac:        { type: string, nullable: true }
+
+    ServiceUpdate:
+      type: object
+      properties:
+        site_id:         { type: integer }
+        address_id:      { type: integer }
+        port:            { type: integer }
+        ip_proto_number: { type: integer }
+        state:           { type: string }
+        name:            { type: string }
+        product:         { type: string,  nullable: true }
+        version:         { type: string,  nullable: true }
+        extra_info:      { type: string,  nullable: true }
+        os_type:         { type: string,  nullable: true }
+        device_type:     { type: string,  nullable: true }
+        hostname:        { type: string,  nullable: true }
+        confidence:      { type: integer, nullable: true }
+        method:          { type: string,  nullable: true }
+        service_fp:      { type: string,  nullable: true }
+        cpe:             { type: string,  nullable: true }
+        rpcnum:          { type: integer, nullable: true }
+        lowver:          { type: integer, nullable: true }
+        highver:         { type: integer, nullable: true }
+        owner:           { type: string,  nullable: true }
+
+    CredentialUpdate:
+      type: object
+      properties:
+        username: { type: string, nullable: true }
+        password: { type: string, nullable: true }
+        hash:     { type: string, nullable: true }
+
+    NoteUpdate:
+      type: object
+      properties:
+        text:          { type: string }
+        service_id:    { type: integer, nullable: true }
+        address_id:    { type: integer, nullable: true }
+        host_id:       { type: integer, nullable: true }
+        network_id:    { type: integer, nullable: true }
+        credential_id: { type: integer, nullable: true }
+
+    # ---- sub-resource creation bodies -----------------------------------
+    # Used when POSTing a note via a parent-resource endpoint.
+    # The parent FK is taken from the URL path — do not accept it in the
+    # body to avoid conflicts.
+
+    NoteCreate:
+      type: object
+      required: [text]
+      properties:
+        text: { type: string }
+
+    # ---- association bodies ----
+
+    TagAssignmentTarget:
+      description: >
+        Exactly one of the nullable fields must be set when creating an
+        assignment. On GET the server returns the stored values.
+      type: object
+      required: [tag_id]
+      properties:
+        id:            { type: integer, readOnly: true }
+        tag_id:        { type: integer }
+        service_id:    { type: integer, nullable: true }
+        address_id:    { type: integer, nullable: true }
+        host_id:       { type: integer, nullable: true }
+        network_id:    { type: integer, nullable: true }
+        credential_id: { type: integer, nullable: true }
+
+    CredentialServiceLink:
+      type: object
+      required: [credential_id, service_id]
+      properties:
+        id:            { type: integer, readOnly: true }
+        credential_id: { type: integer }
+        service_id:    { type: integer }
+
+    # ---- list envelopes ----
+
+    SiteList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Site' } }
+
+    TagList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Tag' } }
+
+    NetworkList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Network' } }
+
+    HostList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Host' } }
+
+    AddressList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Address' } }
+
+    ServiceList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Service' } }
+
+    CredentialList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Credential' } }
+
+    NoteList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/Note' } }
+
+    TagAssignmentList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/TagAssignmentTarget' } }
+
+    CredentialServiceList:
+      type: object
+      properties:
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/CredentialServiceLink' } }
+
+    Error:
+      type: object
+      properties:
+        code:    { type: integer }
+        message: { type: string }
+
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    BadRequest:
+      description: Validation error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+paths:
+
+  # ==========================================================================
+  # Sites
+  # ==========================================================================
+  /sites:
+    get:
+      summary: List sites
+      operationId: listSites
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/q'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SiteList' }
+    post:
+      summary: Create site
+      operationId: createSite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Site' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Site' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /sites/{site_id}:
+    parameters:
+      - $ref: '#/components/parameters/siteId'
+    get:
+      summary: Get site
+      operationId: getSite
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Site' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update site
+      operationId: updateSite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SiteUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Site' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      summary: Delete site (cascades to all child resources)
+      operationId: deleteSite
+      responses:
+        '204': { description: Deleted }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ==========================================================================
+  # Tags
+  # ==========================================================================
+  /tags:
+    get:
+      summary: List tags
+      operationId: listTags
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/q'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagList' }
+    post:
+      summary: Create tag
+      operationId: createTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Tag' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tag' }
+
+  /tags/{tag_id}:
+    parameters:
+      - $ref: '#/components/parameters/tagId'
+    get:
+      summary: Get tag
+      operationId: getTag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tag' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update tag
+      operationId: updateTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TagUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tag' }
+    delete:
+      summary: Delete tag
+      operationId: deleteTag
+      responses:
+        '204': { description: Deleted }
+
+  # ==========================================================================
+  # Networks  (flat + nested under site)
+  # ==========================================================================
+  /networks:
+    get:
+      summary: List all networks
+      operationId: listNetworks
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/q'
+        - name: site_id
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NetworkList' }
+    post:
+      summary: Create network
+      operationId: createNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Network' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Network' }
+
+  /networks/{network_id}:
+    parameters:
+      - $ref: '#/components/parameters/networkId'
+    get:
+      summary: Get network
+      operationId: getNetwork
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Network' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update network (including re-assigning to a different site)
+      operationId: updateNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NetworkUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Network' }
+    delete:
+      summary: Delete network
+      operationId: deleteNetwork
+      responses:
+        '204': { description: Deleted }
+
+  # ==========================================================================
+  # Hosts  (flat + filterable by site)
+  # ==========================================================================
+  /hosts:
+    get:
+      summary: List all hosts
+      operationId: listHosts
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/q'
+        - name: site_id
+          in: query
+          schema: { type: integer }
+        - name: os_type
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HostList' }
+    post:
+      summary: Create host
+      operationId: createHost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Host' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Host' }
+
+  /hosts/{host_id}:
+    parameters:
+      - $ref: '#/components/parameters/hostId'
+    get:
+      summary: Get host
+      operationId: getHost
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Host' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update host (including re-assigning to a different site)
+      operationId: updateHost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/HostUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Host' }
+    delete:
+      summary: Delete host
+      operationId: deleteHost
+      responses:
+        '204': { description: Deleted }
+
+  # Addresses nested under host (primary usage)
+  /hosts/{host_id}/addresses:
+    parameters:
+      - $ref: '#/components/parameters/hostId'
+    get:
+      summary: List addresses for a host
+      operationId: listAddressesByHost
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: ip_family
+          in: query
+          schema: { type: integer, enum: [4, 6] }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AddressList' }
+
+  # Services reachable from a host (JOIN address ON address.host_id = host_id)
+  # Diesel: service::table.inner_join(address::table).filter(address::host_id.eq(host_id))
+  /hosts/{host_id}/services:
+    parameters:
+      - $ref: '#/components/parameters/hostId'
+    get:
+      summary: List services for a host (via its addresses)
+      operationId: listServicesByHost
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: port
+          in: query
+          schema: { type: integer }
+        - name: state
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ServiceList' }
+
+  # ==========================================================================
+  # Addresses  (flat)
+  # ==========================================================================
+  /addresses:
+    get:
+      summary: List all addresses
+      operationId: listAddresses
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: host_id
+          in: query
+          schema: { type: integer }
+        - name: network_id
+          in: query
+          schema: { type: integer }
+        - name: ip
+          in: query
+          description: Exact or prefix match (e.g. 192.168.1.)
+          schema: { type: string }
+        - name: ip_family
+          in: query
+          schema: { type: integer, enum: [4, 6] }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AddressList' }
+    post:
+      summary: Create address
+      operationId: createAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Address' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+
+  /addresses/{address_id}:
+    parameters:
+      - $ref: '#/components/parameters/addressId'
+    get:
+      summary: Get address
+      operationId: getAddress
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update address (including re-assigning host or network)
+      operationId: updateAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddressUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+    delete:
+      summary: Delete address
+      operationId: deleteAddress
+      responses:
+        '204': { description: Deleted }
+
+  # ==========================================================================
+  # Services  (flat + nested under address)
+  # ==========================================================================
+  /services:
+    get:
+      summary: List all services
+      operationId: listServices
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/q'
+        - name: site_id
+          in: query
+          schema: { type: integer }
+        - name: address_id
+          in: query
+          schema: { type: integer }
+        - name: port
+          in: query
+          schema: { type: integer }
+        - name: state
+          in: query
+          schema: { type: string }
+        - name: ip_proto_number
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ServiceList' }
+    post:
+      summary: Create service
+      operationId: createService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Service' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Service' }
+
+  /services/{service_id}:
+    parameters:
+      - $ref: '#/components/parameters/serviceId'
+    get:
+      summary: Get service
+      operationId: getService
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Service' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update service (including re-assigning address or site)
+      operationId: updateService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ServiceUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Service' }
+    delete:
+      summary: Delete service
+      operationId: deleteService
+      responses:
+        '204': { description: Deleted }
+
+  # Credentials linked to a service
+  /services/{service_id}/credentials:
+    parameters:
+      - $ref: '#/components/parameters/serviceId'
+    get:
+      summary: List credentials linked to a service
+      operationId: listCredentialsByService
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CredentialList' }
+    post:
+      summary: Link a credential to a service
+      operationId: linkCredentialToService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [credential_id]
+              properties:
+                credential_id: { type: integer }
+      responses:
+        '201':
+          description: Linked
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CredentialServiceLink' }
+
+  /services/{service_id}/credentials/{credential_id}:
+    parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/credentialId'
+    delete:
+      summary: Unlink a credential from a service
+      operationId: unlinkCredentialFromService
+      responses:
+        '204': { description: Unlinked }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # Tags on a service
+  /services/{service_id}/tags:
+    parameters:
+      - $ref: '#/components/parameters/serviceId'
+    get:
+      summary: List tags on a service
+      operationId: listTagsByService
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagList' }
+    post:
+      summary: Assign a tag to a service
+      operationId: assignTagToService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tag_id]
+              properties:
+                tag_id: { type: integer }
+      responses:
+        '201':
+          description: Assigned
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagAssignmentTarget' }
+
+  /services/{service_id}/tags/{tag_id}:
+    parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/tagId'
+    delete:
+      summary: Remove a tag from a service
+      operationId: removeTagFromService
+      responses:
+        '204': { description: Removed }
+
+  # Notes on a service
+  /services/{service_id}/notes:
+    parameters:
+      - $ref: '#/components/parameters/serviceId'
+    get:
+      summary: List notes on a service
+      operationId: listNotesByService
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NoteList' }
+    post:
+      summary: Add a note to a service
+      operationId: addNoteToService
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+
+  # ==========================================================================
+  # Credentials  (flat)
+  # ==========================================================================
+  /credentials:
+    get:
+      summary: List all credentials
+      operationId: listCredentials
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: username
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CredentialList' }
+    post:
+      summary: Create credential
+      operationId: createCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Credential' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Credential' }
+
+  /credentials/{credential_id}:
+    parameters:
+      - $ref: '#/components/parameters/credentialId'
+    get:
+      summary: Get credential
+      operationId: getCredential
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Credential' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update credential
+      operationId: updateCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CredentialUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Credential' }
+    delete:
+      summary: Delete credential
+      operationId: deleteCredential
+      responses:
+        '204': { description: Deleted }
+
+  # Tags on a credential
+  /credentials/{credential_id}/tags:
+    parameters:
+      - $ref: '#/components/parameters/credentialId'
+    get:
+      summary: List tags on a credential
+      operationId: listTagsByCredential
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagList' }
+    post:
+      summary: Assign tag to credential
+      operationId: assignTagToCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tag_id]
+              properties:
+                tag_id: { type: integer }
+      responses:
+        '201':
+          description: Assigned
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagAssignmentTarget' }
+
+  /credentials/{credential_id}/tags/{tag_id}:
+    parameters:
+      - $ref: '#/components/parameters/credentialId'
+      - $ref: '#/components/parameters/tagId'
+    delete:
+      summary: Remove tag from credential
+      operationId: removeTagFromCredential
+      responses:
+        '204': { description: Removed }
+
+  # Notes on a credential
+  /credentials/{credential_id}/notes:
+    parameters:
+      - $ref: '#/components/parameters/credentialId'
+    get:
+      summary: List notes on a credential
+      operationId: listNotesByCredential
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NoteList' }
+    post:
+      summary: Add note to credential
+      operationId: addNoteToCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+
+  # ==========================================================================
+  # Notes  (flat — for bulk listing / global edit)
+  # ==========================================================================
+  /notes:
+    get:
+      summary: List all notes
+      operationId: listNotes
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: service_id
+          in: query
+          schema: { type: integer }
+        - name: address_id
+          in: query
+          schema: { type: integer }
+        - name: host_id
+          in: query
+          schema: { type: integer }
+        - name: network_id
+          in: query
+          schema: { type: integer }
+        - name: credential_id
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NoteList' }
+    post:
+      summary: Create a note (flat; supply exactly one FK field in the body)
+      operationId: createNote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Note' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /notes/{note_id}:
+    parameters:
+      - $ref: '#/components/parameters/noteId'
+    get:
+      summary: Get note
+      operationId: getNote
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Update note text or re-associate it
+      operationId: updateNote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteUpdate' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+    delete:
+      summary: Delete note
+      operationId: deleteNote
+      responses:
+        '204': { description: Deleted }
+
+  # ==========================================================================
+  # Tag assignments  (flat — for bulk querying across entity types)
+  # ==========================================================================
+  /tag-assignments:
+    get:
+      summary: List all tag assignments
+      operationId: listTagAssignments
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - name: tag_id
+          in: query
+          schema: { type: integer }
+        - name: service_id
+          in: query
+          schema: { type: integer }
+        - name: address_id
+          in: query
+          schema: { type: integer }
+        - name: host_id
+          in: query
+          schema: { type: integer }
+        - name: network_id
+          in: query
+          schema: { type: integer }
+        - name: credential_id
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagAssignmentList' }
+
+  # Per-entity tag sub-resources for addresses, hosts, and networks
+  # (same pattern as /services/{id}/tags above)
+
+  /addresses/{address_id}/tags:
+    parameters:
+      - $ref: '#/components/parameters/addressId'
+    get:
+      summary: List tags on an address
+      operationId: listTagsByAddress
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagList' }
+    post:
+      summary: Assign tag to address
+      operationId: assignTagToAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tag_id]
+              properties:
+                tag_id: { type: integer }
+      responses:
+        '201':
+          description: Assigned
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagAssignmentTarget' }
+
+  /addresses/{address_id}/tags/{tag_id}:
+    parameters:
+      - $ref: '#/components/parameters/addressId'
+      - $ref: '#/components/parameters/tagId'
+    delete:
+      summary: Remove tag from address
+      operationId: removeTagFromAddress
+      responses:
+        '204': { description: Removed }
+
+  /hosts/{host_id}/tags:
+    parameters:
+      - $ref: '#/components/parameters/hostId'
+    get:
+      summary: List tags on a host
+      operationId: listTagsByHost
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagList' }
+    post:
+      summary: Assign tag to host
+      operationId: assignTagToHost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tag_id]
+              properties:
+                tag_id: { type: integer }
+      responses:
+        '201':
+          description: Assigned
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagAssignmentTarget' }
+
+  /hosts/{host_id}/tags/{tag_id}:
+    parameters:
+      - $ref: '#/components/parameters/hostId'
+      - $ref: '#/components/parameters/tagId'
+    delete:
+      summary: Remove tag from host
+      operationId: removeTagFromHost
+      responses:
+        '204': { description: Removed }
+
+  /networks/{network_id}/tags:
+    parameters:
+      - $ref: '#/components/parameters/networkId'
+    get:
+      summary: List tags on a network
+      operationId: listTagsByNetwork
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagList' }
+    post:
+      summary: Assign tag to network
+      operationId: assignTagToNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tag_id]
+              properties:
+                tag_id: { type: integer }
+      responses:
+        '201':
+          description: Assigned
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagAssignmentTarget' }
+
+  /networks/{network_id}/tags/{tag_id}:
+    parameters:
+      - $ref: '#/components/parameters/networkId'
+      - $ref: '#/components/parameters/tagId'
+    delete:
+      summary: Remove tag from network
+      operationId: removeTagFromNetwork
+      responses:
+        '204': { description: Removed }
+
+  /networks/{network_id}/notes:
+    parameters:
+      - $ref: '#/components/parameters/networkId'
+    get:
+      summary: List notes on a network
+      operationId: listNotesByNetwork
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NoteList' }
+    post:
+      summary: Add note to network
+      operationId: addNoteToNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+
+  /hosts/{host_id}/notes:
+    parameters:
+      - $ref: '#/components/parameters/hostId'
+    get:
+      summary: List notes on a host
+      operationId: listNotesByHost
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NoteList' }
+    post:
+      summary: Add note to host
+      operationId: addNoteToHost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+
+  /addresses/{address_id}/notes:
+    parameters:
+      - $ref: '#/components/parameters/addressId'
+    get:
+      summary: List notes on an address
+      operationId: listNotesByAddress
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NoteList' }
+    post:
+      summary: Add note to address
+      operationId: addNoteToAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }

@@ -13,6 +13,23 @@ diesel::table! {
 }
 
 diesel::table! {
+    credential (id) {
+        id -> Integer,
+        username -> Nullable<Text>,
+        password -> Nullable<Text>,
+        hash -> Nullable<Text>,
+    }
+}
+
+diesel::table! {
+    credential_service (id) {
+        id -> Integer,
+        credential_id -> Integer,
+        service_id -> Integer,
+    }
+}
+
+diesel::table! {
     host (id) {
         id -> Integer,
         site_id -> Integer,
@@ -38,6 +55,7 @@ diesel::table! {
         address_id -> Nullable<Integer>,
         host_id -> Nullable<Integer>,
         network_id -> Nullable<Integer>,
+        credential_id -> Nullable<Integer>,
     }
 }
 
@@ -88,21 +106,26 @@ diesel::table! {
         address_id -> Nullable<Integer>,
         host_id -> Nullable<Integer>,
         network_id -> Nullable<Integer>,
+        credential_id -> Nullable<Integer>,
         tag_id -> Integer,
     }
 }
 
 diesel::joinable!(address -> host (host_id));
 diesel::joinable!(address -> network (network_id));
+diesel::joinable!(credential_service -> credential (credential_id));
+diesel::joinable!(credential_service -> service (service_id));
 diesel::joinable!(host -> site (site_id));
 diesel::joinable!(network -> site (site_id));
 diesel::joinable!(note -> address (address_id));
+diesel::joinable!(note -> credential (credential_id));
 diesel::joinable!(note -> host (host_id));
 diesel::joinable!(note -> network (network_id));
 diesel::joinable!(note -> service (service_id));
 diesel::joinable!(service -> address (address_id));
 diesel::joinable!(service -> site (site_id));
 diesel::joinable!(tag_assignment -> address (address_id));
+diesel::joinable!(tag_assignment -> credential (credential_id));
 diesel::joinable!(tag_assignment -> host (host_id));
 diesel::joinable!(tag_assignment -> network (network_id));
 diesel::joinable!(tag_assignment -> service (service_id));
@@ -110,6 +133,8 @@ diesel::joinable!(tag_assignment -> tag (tag_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     address,
+    credential,
+    credential_service,
     host,
     network,
     note,

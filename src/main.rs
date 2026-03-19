@@ -10,6 +10,7 @@ mod list_cmd;
 mod delete_cmd;
 mod note_cmd;
 mod tag_cmd;
+mod cred_cmd;
 
 #[derive(diesel::MultiConnection)]
 pub enum AnyConnection {
@@ -70,6 +71,11 @@ pub enum ResourceTypesFilters {
         #[clap(help = "Matches tag name with regex, e.g. web or prod")]
         tag: Vec<String>,
     },
+    #[clap(alias = "cred", alias = "creds")]
+    Credential {
+        #[clap(help = "Matches credential username or associated service name with regex")]
+        credential: Vec<String>,
+    },
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -90,6 +96,34 @@ pub enum TagAction {
     },
 }
 
+
+#[derive(clap::Subcommand, Debug)]
+pub enum CredAction {
+    #[clap(name = "add", about = "Add a new credential and associate it with service(s)")]
+    Add {
+        #[clap(long, help = "Username")]
+        username: Option<String>,
+        #[clap(long, help = "Password")]
+        password: Option<String>,
+        #[clap(long, help = "Password hash")]
+        hash: Option<String>,
+        #[clap(long, short, help = "Service ID(s) to associate this credential with")]
+        service: Vec<i32>,
+    },
+    #[clap(name = "update", about = "Update an existing credential")]
+    Update {
+        #[clap(help = "Credential ID to update")]
+        id: i32,
+        #[clap(long, help = "New username (empty string clears the field)")]
+        username: Option<String>,
+        #[clap(long, help = "New password (empty string clears the field)")]
+        password: Option<String>,
+        #[clap(long, help = "New hash (empty string clears the field)")]
+        hash: Option<String>,
+        #[clap(long, short, help = "Replace associated service ID(s)")]
+        service: Vec<i32>,
+    },
+}
 
 #[derive(clap::Args, Debug)]
 #[group(required = false, multiple = false)]
@@ -188,6 +222,11 @@ pub enum Commands {
         #[clap(subcommand)]
         action: TagAction,
     },
+    #[clap(name = "cred", about = "Add, update, or manage credentials")]
+    Cred {
+        #[clap(subcommand)]
+        action: CredAction,
+    },
 }
 // defaults to sqlite if not provided
 pub fn establish_connection(args : &Args) -> Result<AnyConnection, NNError> {
@@ -212,6 +251,7 @@ fn main() -> Result<(), NNError> {
         Commands::Delete { .. } => delete_cmd::delete_command(&args, &mut establish_connection(&args)?)?,
         Commands::Note { .. } => note_cmd::note_command(&args, &mut establish_connection(&args)?)?,
         Commands::Tag { .. } => tag_cmd::tag_command(&args, &mut establish_connection(&args)?)?,
+        Commands::Cred { .. } => cred_cmd::cred_command(&args, &mut establish_connection(&args)?)?,
     }
     Ok(())
 }

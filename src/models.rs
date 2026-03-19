@@ -4,8 +4,13 @@
 #![allow(clippy::all)]
 
 use diesel::prelude::*;
-#[derive(Queryable, Debug)]
-pub struct Addres {
+use serde::{Deserialize, Serialize};
+
+// ── Queryable / response models ───────────────────────────────────────────────
+
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::address)]
+pub struct Address {
     pub id: i32,
     pub host_id: i32,
     pub network_id: i32,
@@ -15,7 +20,28 @@ pub struct Addres {
     pub mac: Option<String>,
 }
 
-#[derive(Queryable, Debug)]
+// Keep old name as alias so existing code doesn't break
+pub type Addres = Address;
+
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::credential)]
+pub struct Credential {
+    pub id: i32,
+    pub username: Option<String>,
+    pub password: Option<String>,
+    pub hash: Option<String>,
+}
+
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::credential_service)]
+pub struct CredentialService {
+    pub id: i32,
+    pub credential_id: i32,
+    pub service_id: i32,
+}
+
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::host)]
 pub struct Host {
     pub id: i32,
     pub site_id: i32,
@@ -24,14 +50,16 @@ pub struct Host {
     pub hostname: Option<String>,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::network)]
 pub struct Network {
     pub id: i32,
     pub site_id: i32,
     pub name: String,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::note)]
 pub struct Note {
     pub id: i32,
     pub text: String,
@@ -39,9 +67,10 @@ pub struct Note {
     pub address_id: Option<i32>,
     pub host_id: Option<i32>,
     pub network_id: Option<i32>,
+    pub credential_id: Option<i32>,
 }
 
-#[derive(Queryable, Selectable, Debug)]
+#[derive(Queryable, Selectable, Debug, Serialize)]
 #[diesel(table_name = crate::schema::service)]
 pub struct Service {
     pub id: i32,
@@ -67,31 +96,93 @@ pub struct Service {
     pub owner: Option<String>,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::site)]
 pub struct Site {
     pub id: i32,
     pub name: String,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::tag)]
 pub struct Tag {
     pub id: i32,
     pub name: String,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Selectable, Debug, Serialize)]
+#[diesel(table_name = crate::schema::tag_assignment)]
 pub struct TagAssignment {
     pub id: i32,
     pub service_id: Option<i32>,
     pub address_id: Option<i32>,
     pub host_id: Option<i32>,
     pub network_id: Option<i32>,
+    pub credential_id: Option<i32>,
     pub tag_id: i32,
 }
 
 // ── Insertable models ─────────────────────────────────────────────────────────
 
-#[derive(Insertable)]
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = crate::schema::site)]
+pub struct NewSite {
+    pub name: String,
+}
+
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = crate::schema::network)]
+pub struct NewNetwork {
+    pub site_id: i32,
+    pub name: String,
+}
+
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = crate::schema::host)]
+pub struct NewHost {
+    pub site_id: i32,
+    pub name: String,
+    pub os_type: Option<String>,
+    pub hostname: Option<String>,
+}
+
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = crate::schema::address)]
+pub struct NewAddress {
+    pub host_id: i32,
+    pub network_id: i32,
+    pub ip: String,
+    pub ip_family: i32,
+    pub netmask: i32,
+    pub mac: Option<String>,
+}
+
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = crate::schema::service)]
+pub struct NewService {
+    pub site_id: i32,
+    pub address_id: i32,
+    pub port: i32,
+    pub ip_proto_number: i32,
+    pub state: String,
+    pub name: String,
+    pub product: Option<String>,
+    pub version: Option<String>,
+    pub extra_info: Option<String>,
+    pub os_type: Option<String>,
+    pub device_type: Option<String>,
+    pub hostname: Option<String>,
+    pub confidence: Option<i32>,
+    pub method: Option<String>,
+    pub service_fp: Option<String>,
+    pub cpe: Option<String>,
+    pub rpcnum: Option<i32>,
+    pub lowver: Option<i32>,
+    pub highver: Option<i32>,
+    pub owner: Option<String>,
+}
+
+#[derive(Insertable, Deserialize)]
 #[diesel(table_name = crate::schema::note)]
 pub struct NewNote {
     pub text: String,
@@ -99,9 +190,10 @@ pub struct NewNote {
     pub address_id: Option<i32>,
     pub host_id: Option<i32>,
     pub network_id: Option<i32>,
+    pub credential_id: Option<i32>,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, Deserialize)]
 #[diesel(table_name = crate::schema::tag)]
 pub struct NewTag {
     pub name: String,
@@ -115,4 +207,100 @@ pub struct NewTagAssignment {
     pub address_id: Option<i32>,
     pub host_id: Option<i32>,
     pub network_id: Option<i32>,
+    pub credential_id: Option<i32>,
+}
+
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = crate::schema::credential)]
+pub struct NewCredential {
+    pub username: Option<String>,
+    pub password: Option<String>,
+    pub hash: Option<String>,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = crate::schema::credential_service)]
+pub struct NewCredentialService {
+    pub credential_id: i32,
+    pub service_id: i32,
+}
+
+// ── AsChangeset / PATCH models ────────────────────────────────────────────────
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::site)]
+pub struct SiteChangeset {
+    pub name: Option<String>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::network)]
+pub struct NetworkChangeset {
+    pub site_id: Option<i32>,
+    pub name: Option<String>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::host)]
+pub struct HostChangeset {
+    pub site_id: Option<i32>,
+    pub name: Option<String>,
+    pub os_type: Option<Option<String>>,
+    pub hostname: Option<Option<String>>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::address)]
+pub struct AddressChangeset {
+    pub host_id: Option<i32>,
+    pub network_id: Option<i32>,
+    pub ip: Option<String>,
+    pub ip_family: Option<i32>,
+    pub netmask: Option<i32>,
+    pub mac: Option<Option<String>>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::service)]
+pub struct ServiceChangeset {
+    pub site_id: Option<i32>,
+    pub address_id: Option<i32>,
+    pub port: Option<i32>,
+    pub ip_proto_number: Option<i32>,
+    pub state: Option<String>,
+    pub name: Option<String>,
+    pub product: Option<Option<String>>,
+    pub version: Option<Option<String>>,
+    pub extra_info: Option<Option<String>>,
+    pub os_type: Option<Option<String>>,
+    pub device_type: Option<Option<String>>,
+    pub hostname: Option<Option<String>>,
+    pub confidence: Option<Option<i32>>,
+    pub method: Option<Option<String>>,
+    pub service_fp: Option<Option<String>>,
+    pub cpe: Option<Option<String>>,
+    pub rpcnum: Option<Option<i32>>,
+    pub lowver: Option<Option<i32>>,
+    pub highver: Option<Option<i32>>,
+    pub owner: Option<Option<String>>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::credential)]
+pub struct CredentialChangeset {
+    pub username: Option<Option<String>>,
+    pub password: Option<Option<String>>,
+    pub hash: Option<Option<String>>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::tag)]
+pub struct TagChangeset {
+    pub name: Option<String>,
+}
+
+#[derive(AsChangeset, Deserialize, Default)]
+#[diesel(table_name = crate::schema::note)]
+pub struct NoteChangeset {
+    pub text: Option<String>,
 }

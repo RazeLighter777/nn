@@ -189,6 +189,24 @@ fn tagged_service_ids(conn: &mut AnyConnection, tag_ids: &[i32]) -> Result<Vec<i
     Ok(result.unwrap_or_default())
 }
 
+/// Return credential IDs that carry ALL of the given tag IDs.
+fn tagged_credential_ids(conn: &mut AnyConnection, tag_ids: &[i32]) -> Result<Vec<i32>, NNError> {
+    use schema::tag_assignment::dsl as ta;
+    let mut result: Option<Vec<i32>> = None;
+    for &tid in tag_ids {
+        let ids: Vec<i32> = ta::tag_assignment
+            .filter(ta::tag_id.eq(tid))
+            .filter(ta::credential_id.is_not_null())
+            .select(ta::credential_id.assume_not_null())
+            .load(conn)?;
+        result = Some(match result {
+            None => ids,
+            Some(prev) => prev.into_iter().filter(|i| ids.contains(i)).collect(),
+        });
+    }
+    Ok(result.unwrap_or_default())
+}
+
 // ── Notes / tags helpers for display ─────────────────────────────────────────
 
 /// Returns the set of host IDs (from `host_ids`) that have at least one note.
@@ -228,6 +246,16 @@ fn noted_service_ids(conn: &mut AnyConnection, svc_ids: &[i32]) -> Result<HashSe
     let all: Vec<i32> = schema::note::table
         .filter(schema::note::service_id.is_not_null())
         .select(schema::note::service_id.assume_not_null())
+        .load(conn)?;
+    Ok(all.into_iter().filter(|id| set.contains(id)).collect())
+}
+
+fn noted_credential_ids(conn: &mut AnyConnection, cred_ids: &[i32]) -> Result<HashSet<i32>, NNError> {
+    if cred_ids.is_empty() { return Ok(Default::default()); }
+    let set: HashSet<i32> = cred_ids.iter().copied().collect();
+    let all: Vec<i32> = schema::note::table
+        .filter(schema::note::credential_id.is_not_null())
+        .select(schema::note::credential_id.assume_not_null())
         .load(conn)?;
     Ok(all.into_iter().filter(|id| set.contains(id)).collect())
 }
@@ -322,6 +350,27 @@ fn load_service_tags(
         ))
         .load(conn)?;
     let pairs: Vec<(i32, i32)> = pairs.into_iter().filter(|(sid, _)| id_set.contains(sid)).collect();
+    let tag_ids: Vec<i32> = pairs.iter().map(|(_, tid)| *tid).collect();
+    let all_tags: Vec<models::Tag> = schema::tag::table
+        .filter(schema::tag::id.eq_any(&tag_ids))
+        .load(conn)?;
+    Ok(build_tag_map(pairs, &all_tags))
+}
+
+fn load_credential_tags(
+    conn: &mut AnyConnection,
+    cred_ids: &[i32],
+) -> Result<HashMap<i32, Vec<String>>, NNError> {
+    if cred_ids.is_empty() { return Ok(Default::default()); }
+    let id_set: HashSet<i32> = cred_ids.iter().copied().collect();
+    let pairs: Vec<(i32, i32)> = schema::tag_assignment::table
+        .filter(schema::tag_assignment::credential_id.is_not_null())
+        .select((
+            schema::tag_assignment::credential_id.assume_not_null(),
+            schema::tag_assignment::tag_id,
+        ))
+        .load(conn)?;
+    let pairs: Vec<(i32, i32)> = pairs.into_iter().filter(|(cid, _)| id_set.contains(cid)).collect();
     let tag_ids: Vec<i32> = pairs.iter().map(|(_, tid)| *tid).collect();
     let all_tags: Vec<models::Tag> = schema::tag::table
         .filter(schema::tag::id.eq_any(&tag_ids))
@@ -897,6 +946,156 @@ fn list_tags(
     Ok(())
 }
 
+// ── list credentials ──────────────────────────────────────────────────────────
+
+fn list_credentials(
+    conn: &mut AnyConnection,
+    tags: &[String],
+    patterns: &[String],
+    fmt: &OutputFormat,
+) -> Result<(), NNError> {
+    use schema::{credential, credential_service, service, address};
+
+    let pf = PatternFilter::compile(patterns)?;
+    let tag_ids = resolve_tag_ids(conn, tags)?;
+    let Some(tag_ids) = tag_ids else {
+        return Ok(());
+    };
+
+    let creds: Vec<models::Credential> = {
+        let mut q = credential::table
+            .select(models::Credential::as_select())
+            .into_boxed();
+        if !tag_ids.is_empty() {
+            let tagged = tagged_credential_ids(conn, &tag_ids)?;
+            q = q.filter(credential::id.eq_any(tagged));
+        }
+        q.load(conn)?
+    };
+
+    if creds.is_empty() {
+        return Ok(());
+    }
+
+    let cred_ids: Vec<i32> = creds.iter().map(|c| c.id).collect();
+
+    // Load all credential_service rows for these credentials
+    let cs_rows: Vec<models::CredentialService> = credential_service::table
+        .filter(credential_service::credential_id.eq_any(&cred_ids))
+        .load(conn)?;
+
+    let svc_ids: Vec<i32> = cs_rows.iter().map(|cs| cs.service_id).collect();
+    let all_services: Vec<models::Service> = if svc_ids.is_empty() {
+        vec![]
+    } else {
+        service::table
+            .select(models::Service::as_select())
+            .filter(service::id.eq_any(&svc_ids))
+            .load(conn)?
+    };
+
+    let svc_addr_ids: Vec<i32> = all_services.iter().map(|s| s.address_id).collect();
+    let all_addresses: Vec<models::Addres> = if svc_addr_ids.is_empty() {
+        vec![]
+    } else {
+        address::table.filter(address::id.eq_any(&svc_addr_ids)).load(conn)?
+    };
+
+    let (cred_noted, cred_tag_map) = if let OutputFormat::HumanReadable = fmt {
+        (
+            noted_credential_ids(conn, &cred_ids)?,
+            load_credential_tags(conn, &cred_ids)?,
+        )
+    } else {
+        (HashSet::new(), HashMap::new())
+    };
+
+    for cred in &creds {
+        let assoc_svcs: Vec<&models::Service> = cs_rows
+            .iter()
+            .filter(|cs| cs.credential_id == cred.id)
+            .filter_map(|cs| all_services.iter().find(|s| s.id == cs.service_id))
+            .collect();
+
+        // Pattern filter: match username or associated service name/ip
+        if !pf.is_empty() {
+            let mut candidates: Vec<&str> = vec![];
+            if let Some(ref u) = cred.username {
+                candidates.push(u.as_str());
+            }
+            for svc in &assoc_svcs {
+                candidates.push(svc.name.as_str());
+                if let Some(ref p) = svc.product { candidates.push(p.as_str()); }
+                if let Some(addr) = all_addresses.iter().find(|a| a.id == svc.address_id) {
+                    candidates.push(addr.ip.as_str());
+                }
+            }
+            if !pf.matches(&candidates) {
+                continue;
+            }
+        }
+
+        let svc_ips: Vec<String> = assoc_svcs.iter()
+            .filter_map(|s| all_addresses.iter().find(|a| a.id == s.address_id))
+            .map(|a| a.ip.clone())
+            .collect();
+
+        match fmt {
+            OutputFormat::Addresses => {
+                // Credentials have no natural address; show a compact summary line.
+                // If there are associated service IPs, list those as a bonus.
+                let u = cred.username.as_deref().unwrap_or("<no username>");
+                if svc_ips.is_empty() {
+                    println!("credential: {} (id={})", u, cred.id);
+                } else {
+                    println!("credential: {} (id={}) @ {}", u, cred.id, svc_ips.join(", "));
+                }
+            }
+            OutputFormat::NmapArgs => {
+                let pairs: Vec<(i32, String)> = assoc_svcs.iter()
+                    .filter_map(|s| {
+                        all_addresses.iter().find(|a| a.id == s.address_id)
+                            .map(|a| (s.port, a.ip.clone()))
+                    })
+                    .collect();
+                if pairs.is_empty() {
+                    let u = cred.username.as_deref().unwrap_or("<no username>");
+                    println!("credential: {} (id={})", u, cred.id);
+                } else {
+                    print_nmap_args(&pairs);
+                }
+            }
+            OutputFormat::HumanReadable => {
+                let note_marker = if cred_noted.contains(&cred.id) { " *" } else { "" };
+                let tags = fmt_tags(cred_tag_map.get(&cred.id));
+                println!("credential: id={}{}{}", cred.id, note_marker, tags);
+                if let Some(ref u) = cred.username {
+                    println!("  username: {}", u);
+                }
+                if cred.password.is_some() {
+                    println!("  password: (set)");
+                }
+                if cred.hash.is_some() {
+                    println!("  hash:     (set)");
+                }
+                for svc in &assoc_svcs {
+                    let ip = all_addresses.iter()
+                        .find(|a| a.id == svc.address_id)
+                        .map(|a| a.ip.as_str())
+                        .unwrap_or("?");
+                    println!("  service:  {} port={} @ {} (id={})", svc.name, svc.port, ip, svc.id);
+                }
+            }
+            OutputFormat::Ids => {
+                let u = cred.username.as_deref().unwrap_or("");
+                eprintln!("credential: (username: {})", u);
+                println!("{}", cred.id);
+            }
+        }
+    }
+    Ok(())
+}
+
 // ── Public entry point ────────────────────────────────────────────────────────
 
 pub fn list_cmd(args: &Args) -> Result<(), NNError> {
@@ -930,6 +1129,9 @@ pub fn list_cmd(args: &Args) -> Result<(), NNError> {
         }
         Some(ResourceTypesFilters::Tag { tag: tag_patterns }) => {
             list_tags(&mut conn, tag_patterns, &fmt)?;
+        }
+        Some(ResourceTypesFilters::Credential { credential }) => {
+            list_credentials(&mut conn, tag, credential, &fmt)?;
         }
     }
 

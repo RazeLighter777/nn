@@ -12,6 +12,12 @@ quick-xml = { version = "0.39.2", features = ["serialize"] }
 regex = "1.12.3"
 serde = { version = "1.0.228", features = ["derive"] }
 thiserror = "2.0.18"
+actix-web = "4"
+serde_json = "1"
+
+[dev-dependencies]
+actix-rt = "2"
+
 [profile.release]
 opt-level = "z"     # Optimize for size. "z" also turns off loop vectorization.
 lto = true          # Enable Link Time Optimization (Full)

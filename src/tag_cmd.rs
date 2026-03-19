@@ -58,7 +58,8 @@ pub fn tag_command(args: &Args, conn: &mut AnyConnection) -> Result<(), NNError>
             let rt = resource_type.to_lowercase();
 
             if !matches!(rt.as_str(), "host" | "hosts" | "address" | "addresses"
-                | "service" | "services" | "network" | "networks" | "net" | "nets") {
+                | "service" | "services" | "network" | "networks" | "net" | "nets"
+                | "credential" | "cred" | "creds" | "credentials") {
                 eprintln!("Unknown resource type: {}", resource_type);
                 return Ok(());
             }
@@ -92,6 +93,8 @@ pub fn tag_command(args: &Args, conn: &mut AnyConnection) -> Result<(), NNError>
                             q.filter(tag_assignment::address_id.eq(Some(id))),
                         "service" | "services" =>
                             q.filter(tag_assignment::service_id.eq(Some(id))),
+                        "credential" | "cred" | "creds" | "credentials" =>
+                            q.filter(tag_assignment::credential_id.eq(Some(id))),
                         _ =>
                             q.filter(tag_assignment::network_id.eq(Some(id))),
                     };
@@ -103,10 +106,11 @@ pub fn tag_command(args: &Args, conn: &mut AnyConnection) -> Result<(), NNError>
                 } else {
                     let assignment = NewTagAssignment {
                         tag_id,
-                        host_id:    if matches!(rt.as_str(), "host" | "hosts") { Some(id) } else { None },
-                        address_id: if matches!(rt.as_str(), "address" | "addresses") { Some(id) } else { None },
-                        service_id: if matches!(rt.as_str(), "service" | "services") { Some(id) } else { None },
-                        network_id: if matches!(rt.as_str(), "network" | "networks" | "net" | "nets") { Some(id) } else { None },
+                        host_id:       if matches!(rt.as_str(), "host" | "hosts") { Some(id) } else { None },
+                        address_id:    if matches!(rt.as_str(), "address" | "addresses") { Some(id) } else { None },
+                        service_id:    if matches!(rt.as_str(), "service" | "services") { Some(id) } else { None },
+                        network_id:    if matches!(rt.as_str(), "network" | "networks" | "net" | "nets") { Some(id) } else { None },
+                        credential_id: if matches!(rt.as_str(), "credential" | "cred" | "creds" | "credentials") { Some(id) } else { None },
                     };
                     diesel::insert_into(tag_assignment::table)
                         .values(&assignment)

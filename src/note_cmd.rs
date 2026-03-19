@@ -28,6 +28,10 @@ pub fn note_command(args: &Args, conn: &mut AnyConnection) -> Result<(), NNError
             .filter(note::network_id.eq(Some(*id)))
             .first(conn)
             .optional()?,
+        "credential" | "cred" | "creds" | "credentials" => note::table
+            .filter(note::credential_id.eq(Some(*id)))
+            .first(conn)
+            .optional()?,
         _ => {
             eprintln!("Unknown resource type: {}", resource_type);
             return Ok(());
@@ -77,10 +81,11 @@ pub fn note_command(args: &Args, conn: &mut AnyConnection) -> Result<(), NNError
         let rt = resource_type.as_str();
         let new_note = NewNote {
             text: new_text,
-            host_id:    if matches!(rt, "host" | "hosts") { Some(*id) } else { None },
-            address_id: if matches!(rt, "address" | "addresses") { Some(*id) } else { None },
-            service_id: if matches!(rt, "service" | "services") { Some(*id) } else { None },
-            network_id: if matches!(rt, "network" | "networks" | "net" | "nets") { Some(*id) } else { None },
+            host_id:       if matches!(rt, "host" | "hosts") { Some(*id) } else { None },
+            address_id:    if matches!(rt, "address" | "addresses") { Some(*id) } else { None },
+            service_id:    if matches!(rt, "service" | "services") { Some(*id) } else { None },
+            network_id:    if matches!(rt, "network" | "networks" | "net" | "nets") { Some(*id) } else { None },
+            credential_id: if matches!(rt, "credential" | "cred" | "creds" | "credentials") { Some(*id) } else { None },
         };
         diesel::insert_into(note::table).values(&new_note).execute(conn)?;
         println!("Note saved.");

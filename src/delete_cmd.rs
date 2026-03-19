@@ -69,6 +69,13 @@ pub fn delete_command(args: &Args, conn: &mut AnyConnection) -> Result<(), NNErr
                         .execute(conn)?;
                     println!("Deleted {} tag(s)", num_deleted);
                 }
+                "credential" | "cred" | "creds" | "credentials" => {
+                    let num_deleted = diesel::delete(
+                        credential::table.filter(credential::id.eq_any(ids)),
+                    )
+                    .execute(conn)?;
+                    println!("Deleted {} credential(s)", num_deleted);
+                }
                 _ => {
                     eprintln!("Unknown resource type: {}", resource_type);
                 }
