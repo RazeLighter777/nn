@@ -3,7 +3,7 @@ use diesel::prelude::*;
 use serde::Deserialize;
 
 use crate::{
-    api_serve::db::DbPool,
+    api_serve::{db::DbPool, ListResponse},
     models::*,
     schema::{site, tag, tag_assignment, note},
     NNError,
@@ -27,14 +27,15 @@ pub struct NoteBody {
 // ── Sites ─────────────────────────────────────────────────────────────────────
 
 #[get("/sites")]
-pub async fn list_sites(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<Vec<Site>>> {
+pub async fn list_sites(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<ListResponse<Site>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = site::table.into_boxed();
         if let Some(ref s) = q.q { query = query.filter(site::name.like(format!("%{}%", s))); }
         query.limit(q.limit).offset(q.offset).load::<Site>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/sites")]
@@ -83,14 +84,15 @@ pub async fn delete_site(pool: web::Data<DbPool>, path: web::Path<i32>) -> actix
 // ── Tags ──────────────────────────────────────────────────────────────────────
 
 #[get("/tags")]
-pub async fn list_tags(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<Vec<Tag>>> {
+pub async fn list_tags(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<ListResponse<Tag>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = tag::table.into_boxed();
         if let Some(ref s) = q.q { query = query.filter(tag::name.like(format!("%{}%", s))); }
         query.limit(q.limit).offset(q.offset).load::<Tag>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/tags")]
@@ -139,13 +141,14 @@ pub async fn delete_tag(pool: web::Data<DbPool>, path: web::Path<i32>) -> actix_
 // ── Tag assignments (flat) ────────────────────────────────────────────────────
 
 #[get("/tag-assignments")]
-pub async fn list_tag_assignments(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<Vec<TagAssignment>>> {
+pub async fn list_tag_assignments(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<ListResponse<TagAssignment>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         tag_assignment::table.limit(q.limit).offset(q.offset)
             .load::<TagAssignment>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 // ── Generic tag sub-resource helpers ─────────────────────────────────────────
@@ -193,12 +196,13 @@ pub fn remove_tag_from(conn: &mut crate::AnyConnection, tag_id: i32, col: &str, 
 // ── Notes (flat) ──────────────────────────────────────────────────────────────
 
 #[get("/notes")]
-pub async fn list_notes(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<Vec<Note>>> {
+pub async fn list_notes(pool: web::Data<DbPool>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<ListResponse<Note>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         note::table.limit(q.limit).offset(q.offset).load::<Note>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/notes")]

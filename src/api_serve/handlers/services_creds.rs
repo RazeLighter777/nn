@@ -6,6 +6,7 @@ use crate::{
     api_serve::{
         db::DbPool,
         handlers::sites_tags::{PaginationQ, NoteBody, list_tags_for, assign_tag, remove_tag_from, list_notes_for, create_note_for},
+        ListResponse,
     },
     models::*,
     schema::{service, address, credential, credential_service},
@@ -23,7 +24,7 @@ pub struct ServiceQuery {
 }
 
 #[get("/services")]
-pub async fn list_services(pool: web::Data<DbPool>, q: web::Query<ServiceQuery>) -> actix_web::Result<web::Json<Vec<Service>>> {
+pub async fn list_services(pool: web::Data<DbPool>, q: web::Query<ServiceQuery>) -> actix_web::Result<web::Json<ListResponse<Service>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = service::table.into_boxed();
@@ -35,7 +36,8 @@ pub async fn list_services(pool: web::Data<DbPool>, q: web::Query<ServiceQuery>)
         if let Some(v) = q.ip_proto_number { query = query.filter(service::ip_proto_number.eq(v)); }
         query.limit(q.limit).offset(q.offset).load::<Service>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/services")]
@@ -79,7 +81,7 @@ pub async fn delete_service(pool: web::Data<DbPool>, path: web::Path<i32>) -> ac
 }
 
 #[get("/hosts/{id}/services")]
-pub async fn list_host_services(pool: web::Data<DbPool>, path: web::Path<i32>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<Vec<Service>>> {
+pub async fn list_host_services(pool: web::Data<DbPool>, path: web::Path<i32>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<ListResponse<Service>>> {
     let id = path.into_inner();
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
@@ -89,7 +91,8 @@ pub async fn list_host_services(pool: web::Data<DbPool>, path: web::Path<i32>, q
             .select(Service::as_select())
             .load::<Service>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 // ── Service tags ──────────────────────────────────────────────────────────────
@@ -188,14 +191,15 @@ pub struct CredentialQuery {
 }
 
 #[get("/credentials")]
-pub async fn list_credentials(pool: web::Data<DbPool>, q: web::Query<CredentialQuery>) -> actix_web::Result<web::Json<Vec<Credential>>> {
+pub async fn list_credentials(pool: web::Data<DbPool>, q: web::Query<CredentialQuery>) -> actix_web::Result<web::Json<ListResponse<Credential>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = credential::table.into_boxed();
         if let Some(ref u) = q.username { query = query.filter(credential::username.eq(u)); }
         query.limit(q.limit).offset(q.offset).load::<Credential>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/credentials")]

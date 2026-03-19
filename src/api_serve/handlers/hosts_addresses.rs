@@ -6,6 +6,7 @@ use crate::{
     api_serve::{
         db::DbPool,
         handlers::sites_tags::{PaginationQ, NoteBody, list_tags_for, assign_tag, remove_tag_from, list_notes_for, create_note_for},
+        ListResponse,
     },
     models::*,
     schema::{host, address, network},
@@ -18,7 +19,7 @@ use crate::{
 pub struct NetworkQuery { #[serde(default = "crate::api_serve::handlers::sites_tags::default_limit")] pub limit: i64, #[serde(default)] pub offset: i64, pub q: Option<String>, pub site_id: Option<i32> }
 
 #[get("/networks")]
-pub async fn list_networks(pool: web::Data<DbPool>, q: web::Query<NetworkQuery>) -> actix_web::Result<web::Json<Vec<Network>>> {
+pub async fn list_networks(pool: web::Data<DbPool>, q: web::Query<NetworkQuery>) -> actix_web::Result<web::Json<ListResponse<Network>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = network::table.into_boxed();
@@ -26,7 +27,8 @@ pub async fn list_networks(pool: web::Data<DbPool>, q: web::Query<NetworkQuery>)
         if let Some(sid) = q.site_id { query = query.filter(network::site_id.eq(sid)); }
         query.limit(q.limit).offset(q.offset).load::<Network>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/networks")]
@@ -112,7 +114,7 @@ pub async fn add_network_note(pool: web::Data<DbPool>, path: web::Path<i32>, bod
 pub struct HostQuery { #[serde(default = "crate::api_serve::handlers::sites_tags::default_limit")] pub limit: i64, #[serde(default)] pub offset: i64, pub q: Option<String>, pub site_id: Option<i32>, pub os_type: Option<String> }
 
 #[get("/hosts")]
-pub async fn list_hosts(pool: web::Data<DbPool>, q: web::Query<HostQuery>) -> actix_web::Result<web::Json<Vec<Host>>> {
+pub async fn list_hosts(pool: web::Data<DbPool>, q: web::Query<HostQuery>) -> actix_web::Result<web::Json<ListResponse<Host>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = host::table.into_boxed();
@@ -121,7 +123,8 @@ pub async fn list_hosts(pool: web::Data<DbPool>, q: web::Query<HostQuery>) -> ac
         if let Some(ref ot) = q.os_type { query = query.filter(host::os_type.eq(ot)); }
         query.limit(q.limit).offset(q.offset).load::<Host>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/hosts")]
@@ -207,7 +210,7 @@ pub async fn add_host_note(pool: web::Data<DbPool>, path: web::Path<i32>, body: 
 pub struct AddressQuery { #[serde(default = "crate::api_serve::handlers::sites_tags::default_limit")] pub limit: i64, #[serde(default)] pub offset: i64, pub host_id: Option<i32>, pub network_id: Option<i32>, pub ip: Option<String>, pub ip_family: Option<i32> }
 
 #[get("/addresses")]
-pub async fn list_addresses(pool: web::Data<DbPool>, q: web::Query<AddressQuery>) -> actix_web::Result<web::Json<Vec<Address>>> {
+pub async fn list_addresses(pool: web::Data<DbPool>, q: web::Query<AddressQuery>) -> actix_web::Result<web::Json<ListResponse<Address>>> {
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         let mut query = address::table.into_boxed();
@@ -217,7 +220,8 @@ pub async fn list_addresses(pool: web::Data<DbPool>, q: web::Query<AddressQuery>
         if let Some(fam) = q.ip_family { query = query.filter(address::ip_family.eq(fam)); }
         query.limit(q.limit).offset(q.offset).load::<Address>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[post("/addresses")]
@@ -261,13 +265,14 @@ pub async fn delete_address(pool: web::Data<DbPool>, path: web::Path<i32>) -> ac
 }
 
 #[get("/hosts/{id}/addresses")]
-pub async fn list_host_addresses(pool: web::Data<DbPool>, path: web::Path<i32>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<Vec<Address>>> {
+pub async fn list_host_addresses(pool: web::Data<DbPool>, path: web::Path<i32>, q: web::Query<PaginationQ>) -> actix_web::Result<web::Json<ListResponse<Address>>> {
     let id = path.into_inner();
     let rows = web::block(move || {
         let mut conn = pool.lock().unwrap();
         address::table.filter(address::host_id.eq(id)).limit(q.limit).offset(q.offset).load::<Address>(&mut *conn).map_err(NNError::from)
     }).await??;
-    Ok(web::Json(rows))
+    let total = rows.len();
+    Ok(web::Json(ListResponse { total, items: rows }))
 }
 
 #[get("/addresses/{id}/tags")]

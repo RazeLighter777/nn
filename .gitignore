@@ -5,3 +5,8 @@ database.db
 # Added by cargo
 
 /target
+
+# Frontend
+/frontend/node_modules/
+/frontend/.pnpm-store/
+/dist/frontend/

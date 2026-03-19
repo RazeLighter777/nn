@@ -29,5 +29,14 @@ services:
     # Uncomment to mount a local .env instead of hard-coding credentials above:
     # env_file: .env
 
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+
 volumes:
   pg_data:

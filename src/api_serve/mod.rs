@@ -3,8 +3,15 @@ pub mod handlers;
 
 use actix_web::{web, App, HttpServer};
 use actix_web::http::StatusCode;
+use serde::Serialize;
 
 use crate::NNError;
+
+#[derive(Serialize)]
+pub struct ListResponse<T: Serialize> {
+    pub total: usize,
+    pub items: Vec<T>,
+}
 use db::DbPool;
 use handlers::{hosts_addresses::*, services_creds::*, sites_tags::*};
 
