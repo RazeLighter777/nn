@@ -11,6 +11,7 @@ mod delete_cmd;
 mod note_cmd;
 mod tag_cmd;
 mod cred_cmd;
+mod api_serve;
 
 #[derive(diesel::MultiConnection)]
 pub enum AnyConnection {
@@ -36,7 +37,11 @@ pub enum NNError {
 
 #[derive(clap::Parser, Debug)]
 pub struct Args {
-    #[clap(short, long, help = "Database URL to connect to", default_value = "sqlite://database.db")]
+    /// Database URL to connect to.
+    ///
+    /// Resolved in order: CLI flag → DATABASE_URL env var →
+    /// PGHOST/PGPORT/PGUSER/PGPASSWORD/PGDATABASE env vars → sqlite://database.db
+    #[clap(short, long, env = "DATABASE_URL", help = "Database URL (postgres://... or sqlite://...)")]
     pub database_url: Option<String>,
     #[clap(subcommand)]
     pub command: Commands,
@@ -227,23 +232,58 @@ pub enum Commands {
         #[clap(subcommand)]
         action: CredAction,
     },
+    #[clap(name = "api-serve", about = "Start REST API server")]
+    ApiServe {
+        #[clap(long, short, default_value = "127.0.0.1:8080", help = "Address to bind the HTTP server")]
+        bind: String,
+        #[clap(long, help = "Database URL (overrides global --database-url)")]
+        database_url: Option<String>,
+    },
 }
-// defaults to sqlite if not provided
-pub fn establish_connection(args : &Args) -> Result<AnyConnection, NNError> {
-    let database_url = args.database_url.as_deref().unwrap_or("sqlite://database.db");
+/// Resolve the database URL from (highest → lowest priority):
+///  1. Explicit CLI flag / `DATABASE_URL` env var (already merged by clap)
+///  2. Standard libpq env vars: PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE
+///  3. Hard-coded SQLite default: `sqlite://database.db`
+pub fn resolve_database_url(explicit: Option<&str>) -> String {
+    if let Some(url) = explicit.filter(|s| !s.is_empty()) {
+        return url.to_owned();
+    }
+    // Fall back to individual libpq env vars when PGHOST is set
+    if let Ok(host) = std::env::var("PGHOST") {
+        let port = std::env::var("PGPORT").unwrap_or_else(|_| "5432".to_string());
+        let user = std::env::var("PGUSER").unwrap_or_else(|_| "postgres".to_string());
+        let password = std::env::var("PGPASSWORD").unwrap_or_default();
+        let dbname = std::env::var("PGDATABASE").unwrap_or_else(|_| user.clone());
+        let auth = if password.is_empty() {
+            user
+        } else {
+            format!("{}:{}", user, password)
+        };
+        return format!("postgres://{}@{}:{}/{}", auth, host, port, dbname);
+    }
+    "sqlite://database.db".to_owned()
+}
+
+/// Open a connection using the resolved database URL.
+pub fn establish_connection(args: &Args) -> Result<AnyConnection, NNError> {
+    let database_url = resolve_database_url(args.database_url.as_deref());
     if database_url.starts_with("postgres://") || database_url.starts_with("postgresql://") {
-        let conn = diesel::PgConnection::establish(database_url)?;
+        let conn = diesel::PgConnection::establish(&database_url)?;
         Ok(AnyConnection::Postgresql(conn))
     } else if database_url.starts_with("sqlite://") {
         use diesel::connection::SimpleConnection;
-        let mut conn = diesel::SqliteConnection::establish(database_url)?;
+        let mut conn = diesel::SqliteConnection::establish(&database_url)?;
         conn.batch_execute("PRAGMA foreign_keys = ON;")?;
         Ok(AnyConnection::Sqlite(conn))
     } else {
-        Err(NNError::DatabaseError(diesel::result::Error::NotFound)) // or some custom error
+        Err(NNError::ConnectionError(diesel::ConnectionError::InvalidConnectionUrl(
+            format!("Unsupported database URL scheme: {}", database_url),
+        )))
     }
 }
 fn main() -> Result<(), NNError> {
+    // Load .env file if present (errors are silently ignored)
+    dotenvy::dotenv().ok();
     let args = Args::parse();
     match &args.command {
         Commands::ImportScan { .. } => import_cmd::import_cmd(&args)?,
@@ -252,6 +292,7 @@ fn main() -> Result<(), NNError> {
         Commands::Note { .. } => note_cmd::note_command(&args, &mut establish_connection(&args)?)?,
         Commands::Tag { .. } => tag_cmd::tag_command(&args, &mut establish_connection(&args)?)?,
         Commands::Cred { .. } => cred_cmd::cred_command(&args, &mut establish_connection(&args)?)?,
+        Commands::ApiServe { .. } => api_serve::api_serve_command(&args)?,
     }
     Ok(())
 }
