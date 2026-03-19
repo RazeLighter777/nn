@@ -1,1 +1,6 @@
 .rustup
+.cargo
+.direnv
+# Added by cargo
+
+/target
