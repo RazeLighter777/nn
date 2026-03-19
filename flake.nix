@@ -106,6 +106,7 @@
           packages = [
             pkgs.diesel-cli-ext
             pkgs.diesel-cli
+            pkgs.podman-compose
           ];
         };
       }
