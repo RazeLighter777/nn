@@ -106,11 +106,15 @@
           packages = [
             pkgs.diesel-cli-ext
             pkgs.diesel-cli
+<<<<<<< HEAD
             # Backend dev tooling
             pkgs.cargo-watch
             # Frontend tooling
             pkgs.nodejs_22
             pkgs.pnpm
+=======
+            pkgs.podman-compose
+>>>>>>> a9689914332894ebf5f118d0cbc81936cc4b16df
           ];
         };
       }
