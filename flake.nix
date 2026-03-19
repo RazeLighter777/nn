@@ -106,6 +106,11 @@
           packages = [
             pkgs.diesel-cli-ext
             pkgs.diesel-cli
+            # Backend dev tooling
+            pkgs.cargo-watch
+            # Frontend tooling
+            pkgs.nodejs_22
+            pkgs.pnpm
           ];
         };
       }
